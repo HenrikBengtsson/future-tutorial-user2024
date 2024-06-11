@@ -1,0 +1,447 @@
+---
+title: "Lab: Futureverse 1"
+author: "Henrik Bengtsson"
+description: "Speed up your code through parallel computing"
+image: "assets/featured.jpg"
+format: html
+---
+
+```{r, echo = FALSE}
+task_count <- 0L
+task <- function() {
+  task_count <<- task_count + 1L
+  task_count
+}
+```
+
+::: {.callout-note}
+
+This is the first of two parallelization labs. It will take you
+through some basic steps to parallelize your code using
+**[Futureverse]**. It focuses on core functions `future()` and
+`value()` for the purpose of illustrating what happens behind the
+scenes when we parallelize R code.
+
+You are highly encouraged to test things out yourself and tweak things
+to figure out how these methods behave.
+
+:::
+
+
+
+## Install
+
+We will start out by installing common Futureverse packages part of
+the Futureverse. We will not need them all in this lab, but it is
+convenient to have them all installed already now.
+
+```{r}
+#| eval: false
+install.packages("futureverse")
+```
+
+
+## Exercises
+
+In order to illustrate parallelization, we need two things: (i) a way
+to measure time, and (ii) something that takes at least a few seconds
+to run.
+
+**Task `{r} task()`:**
+
+Copy and paste the following two code blocks.
+
+Create functions `tic()` and `toc()` to measure time:
+
+```{r}
+#| eval: false
+tic <- function() {
+  tic_start <<- base::Sys.time()
+}
+
+toc <- function() {
+  dt <- base::difftime(base::Sys.time(), tic_start)
+  dt <- round(dt, digits = 1L)
+  message(paste(format(dt), "since tic()"))
+}
+```
+
+These functions can be used as a timer, e.g.
+
+```{r}
+#| eval: false
+tic()
+Sys.sleep(1.5)
+toc()
+```
+
+```{r}
+#| echo: false
+cat("1.5 secs since tic()\n")
+```
+
+```{r}
+#| eval: false
+Sys.sleep(4.0)
+toc()
+```
+
+```{r}
+#| echo: false
+cat("5.5 secs since tic()\n")
+```
+
+
+Next, create toy function `slow_sum()` for calculating the sum of a
+vector really slowly:
+
+```{r}
+#| eval: false
+slow_sum <- function(x) {
+  sum <- 0
+  for (value in x) {
+    Sys.sleep(1.0)     ## one-second slowdown per value
+    sum <- sum + value
+  }
+  sum
+}
+```
+
+This function works just like `sum()`, but it is very slow. If we use
+it to calculate $1 + 2 + \ldots + 10$, it will takes us ten seconds to
+get the result;
+
+```{r}
+#| eval: false
+tic()
+y <- slow_sum(1:10)
+y
+toc()
+```
+
+_Make sure you can run the latter, that it takes ten seconds to
+complete and that it returns the correct value._
+
+We are now ready to get rolling!
+
+
+### Simple parallel tasks
+
+At the very core of Futureverse is the **[future]** package. Let us
+start out by loading this core package:
+
+```{r}
+#| eval: false
+library(future)
+```
+
+It provides us with the fundamental building blocks for running R code
+in parallel; functions `future()`, `value()`, and `resolved()`.  Other
+Futureverse packages, such as **future.apply**, **furrr**, and
+**doFuture**, rely on these three functions to build up more
+feature-rich functions. We will return to those later, but for now we
+will focus on `future()` and `value()`.
+
+
+**Task `{r} task()`:**
+
+Let's start by writing our initial example using futures:
+
+```{r}
+#| eval: false
+tic()
+f <- future(slow_sum(1:10))
+y <- value(f)
+toc()
+```
+
+_Confirm that you get the correct result. Did it run faster?_
+
+<!-- No, because the default is plan(sequential) -->
+
+
+**Task `{r} task()`:**
+
+Add another `toc()` just after the `future()` call;
+
+```{r}
+#| eval: false
+tic()
+f <- future(slow_sum(1:10))
+toc()
+y <- value(f)
+toc()
+y
+toc()
+```
+
+_How long did the creation of the future take?_
+
+<!-- It took a long time, because `future()` is blocking with
+plan(sequential) -->
+
+
+**Task `{r} task()`:**
+
+By design, Futureverse runs everything sequentially by default. We can
+configure it run code in parallel using two background workers as:
+
+```{r}
+#| eval: false
+plan(multisession, workers = 2)
+```
+
+_Make this change, and rerun the above example. Did the different
+steps take as long as you expected? What do you think the reason is
+for the change?_
+
+<!-- The `future()` call is swift, because it is non-blocking when
+using a parallel backend. The total processing time, however, is still
+the same, because `future()` is evaluating the expression in
+a single parallel worker. -->
+
+
+**Task `{r} task()`:**
+
+Let's calculate $1 + 2 + \ldots + 10$ in two steps: (a) $1 + 2 +
+\ldots + 5$ and (b) $6 + 7 + \ldots + 10$, and then sum the two
+results.
+
+```{r}
+#| eval: false
+fa <- future(slow_sum(1:5))
+fb <- future(slow_sum(6:10))
+y <- value(fa) + value(fb)
+y
+```
+
+But first, make sure to add `toc()` after each statement to better
+understand how long each step takes;
+
+```{r}
+#| eval: false
+tic()
+fa <- future(slow_sum(1:5))
+toc()
+fb <- future(slow_sum(6:10))
+toc()
+y <- value(fa) + value(fb)
+toc()
+y
+toc()
+```
+
+_Make sure you get the expected result. Did it finish sooner? Which
+step takes the longest? Why do you think that is?_
+
+<!-- Both `future()` calls are swift, because they are non-blocking
+when using a parallel backend. However, `y <- value(fa) + value(fb)`
+blocks, because it waits for the values of future `fa` and future `fb`
+to be available. The total processing time is five seconds. -->
+
+
+### Create many parallel tasks via a for loop
+
+**Task `{r} task()`:**
+
+Here is a very complicated way of calculating the sum $1 + 2 + \ldots
++ 20$ in four chunks and outputting messages to show the progress:
+
+```{r}
+#| eval: false
+tic()
+xs <- list(1:5, 6:10, 11:15, 16:20)
+ys <- list()
+for (ii in seq_along(xs)) {
+  message(paste0("Iteration ", ii))
+  ys[[ii]] <- slow_sum(xs[[ii]])
+}
+message("Done")
+print(ys)
+
+ys <- unlist(ys)
+ys
+
+y <- sum(ys)
+y
+toc()
+```
+
+Rewrite it such that each iteration is parallelized via a future. Use
+four parallel workers as in:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession, workers = 4)
+```
+
+<!--
+
+library(future)
+plan(multisession, workers = 4)
+
+tic()
+
+xs <- list(1:5, 6:10, 11:15, 16:20)
+
+fs <- list()
+for (ii in seq_along(xs)) {
+  message(paste0("Iteration ", ii))
+  fs[[ii]] <- future( slow_sum(xs[[ii]]) )
+}
+message("Done")
+
+ys <- value(fs)
+ys <- unlist(ys)
+ys               ## [1] 15 40 65 90
+y <- sum(ys)
+y                ## 210
+
+toc()
+-->
+
+
+**Task `{r} task()`:**
+
+Retry with three parallel workers as in:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession, workers = 3)
+```
+
+_Did you notice something?  What do you think happened?_
+
+
+### Errors and parallel processing
+
+The Futureverse has been designed such that your experience running
+parallel code will be as close as possible to when you run regular,
+sequential code. For example, if we call:
+
+```{r, error = TRUE}
+x <- "1.2"
+y <- log(x)
+```
+
+we get an error.
+
+**Task `{r} task()`:**
+
+If we try the same with a future, it's natural to expect the same error;
+
+```{r, error = TRUE}
+#| eval: false
+f <- future(log(x))
+```
+
+_Run the above. Did you get an error or not? What could be the reason
+for that?_
+
+<!-- We will not get an error until we collect the results, which only
+happens when we try to get the value of `f`. -->
+
+_If we try to get the value of `f` as in_
+
+
+```{r, error = TRUE}
+#| eval: false
+y <- value(f)
+```
+
+_what happens?_
+
+<!-- Here we are requesting the value of `f`, which will trigger the
+error to be signalled. -->
+
+
+::: {.callout-note}
+
+At first, it might appear obvious that we should get an error in these
+cases and that it will look the same as when running regular
+sequential code. But rest assured, Futureverse is the only parallel
+framework that behave this way. If you use one of the traditional
+frameworks you will get a different type of error, or not an error at
+all. This is the case for `parLapply()` and `mclapply()` of
+**parallel** as well as for `foreach()` and `%dopar%` of **foreach**.
+
+:::
+
+
+**Task `{r} task()`:**
+
+Try with the following sequential code:
+
+```{r, error = TRUE}
+#| eval: false
+y <- lapply(list("1.2", 42), log)
+```
+
+_Did you get an error?_
+
+Next, try the same but with `mclapply()` of the **parallel** package;
+
+```{r, error = TRUE}
+#| eval: false
+library(parallel)
+y <- mclapply(list("1.2", 42), log)
+```
+
+_What happened - did you get an error?_
+
+_What do you get if you look at `y`, e.g. `print(y)` or `str(y)`?_
+
+
+
+**Task `{r} task()`:**
+
+Let's continue with our future-based example. What do you think the
+behavior is if we switch back to sequential processing using:
+
+```{r, error = TRUE}
+#| eval: false
+plan(sequential)
+
+f <- future(log(x))
+y <- value(f)
+```
+
+? Try it. _What do you observe? Did you expect something different?
+Did the error happen already when calling `future()` or when calling
+`value()`?_
+
+When done, make sure to switch back to parallel processing again:
+
+```{r}
+#| eval: false
+plan(multisession, workers = 2)
+```
+
+
+### Warnings and parallel processing
+
+Just like errors, warnings are signalled as-is when parallelizing via
+futures.
+
+**Task `{r} task()`:**
+
+Try the following:
+
+```{r}
+#| eval: false
+x <- c(1.2, -0.5)
+f <- future(log(x))
+y <- value(f)
+y
+```
+
+_Did you get a warning? By the way, how do you think the parallel
+worker that runs in the background and evalutes `log(x)` knows what
+the value of `x` is?_
+
+
+
+[Futureverse]: https://www.futureverse.org/
+[future]: https://future.futureverse.org/
