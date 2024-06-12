@@ -26,6 +26,7 @@ jobs:
         run: |
            chooseCRANmirror(ind = 1)
            install.packages(c("rmarkdown", "future"))
+           cat(file = "CNAME", "now.futureverse.org")
         shell: Rscript {0}
  
       - name: Render and Publish
