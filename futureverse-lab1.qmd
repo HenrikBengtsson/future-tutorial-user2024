@@ -444,6 +444,32 @@ worker that runs in the background and evalutes `log(x)` knows what
 the value of `x` is?_
 
 
+### Our own parallel lapply
+
+**Task `{r} task()`:**
+
+Above, you used a for-loop to parallelize tasks. See if you can
+achieve the same using `lapply()` instead.
+
+
+**Task `{r} task()`:**
+
+Take your parallel `lapply()` code and wrap it up in a function
+`parallel_lapply()` that takes two arguments `X` and `FUN` so that we
+can call:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession)
+
+xs <- list(1:5, 6:10, 11:15, 16:20)
+
+ys <- parallel_lapply(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+```
+
 
 [Futureverse]: https://www.futureverse.org/
 [future]: https://future.futureverse.org/
