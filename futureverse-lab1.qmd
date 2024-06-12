@@ -317,6 +317,45 @@ plan(multisession, workers = 3)
 _Did you notice something?  What do you think happened?_
 
 
+### Our own parallel lapply
+
+**Task `{r} task()`:**
+
+Above, you used a for-loop to parallelize tasks. See if you can
+achieve the same using `lapply()` instead.
+
+
+**Task `{r} task()`:**
+
+Take your parallel `lapply()` code and wrap it up in a function
+`parallel_lapply()` that takes two arguments `X` and `fun` so that we
+can call:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession)
+
+xs <- list(1:5, 6:10, 11:15, 16:20)
+
+ys <- parallel_lapply(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+```
+
+<!--
+parallel_lapply <- function(X, fun) {
+  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
+  fs <- lapply(X, FUN = function(x) {
+    ## For element 'x', create future that calls fun(x)
+    future(fun(x))
+  })
+  
+  ## Collect the values from all futures
+  value(fs)
+}
+-->
+
 ### Errors and parallel processing
 
 The Futureverse has been designed such that your experience running
@@ -378,22 +417,65 @@ Try with the following sequential code:
 
 ```{r, error = TRUE}
 #| eval: false
-y <- lapply(list("1.2", 42), log)
+X <- list("1.2", 42)
+y <- lapply(X, log)
 ```
 
 _Did you get an error?_
 
-Next, try the same but with `mclapply()` of the **parallel** package;
+
+**Task `{r} task()`:**
+
+Next, try the same but with `mclapply()` of the **parallel**
+package;
 
 ```{r, error = TRUE}
 #| eval: false
 library(parallel)
-y <- mclapply(list("1.2", 42), log)
+
+X <- list("1.2", 42)
+y <- mclapply(X, log)
 ```
 
 _What happened - did you get an error?_
 
 _What do you get if you look at `y`, e.g. `print(y)` or `str(y)`?_
+
+
+**Task `{r} task()`:**
+
+Finally, try the same but with your `parallel_lapply()` that uses Futureverse:
+
+```{r, error = TRUE}
+#| eval: false
+library(future)
+plan(multisession)
+
+X <- list("1.2", 42)
+y <- parallel_lapply(X, log)
+```
+
+Comment: Expand the following for a working version of
+`parallel_lapply()`.
+
+<details>
+<summary>parallel_lapply()</summary>
+<pre>
+parallel_lapply <- function(X, fun) {
+  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
+  fs <- lapply(X, FUN = function(x) {
+    ## For element 'x', create future that calls fun(x)
+    future(fun(x))
+  })
+  
+  ## Collect the values from all futures
+  value(fs)
+}
+</pre>
+</details>
+
+_Did you get an error?_
+
 
 
 
@@ -443,32 +525,6 @@ _Did you get a warning? By the way, how do you think the parallel
 worker that runs in the background and evalutes `log(x)` knows what
 the value of `x` is?_
 
-
-### Our own parallel lapply
-
-**Task `{r} task()`:**
-
-Above, you used a for-loop to parallelize tasks. See if you can
-achieve the same using `lapply()` instead.
-
-
-**Task `{r} task()`:**
-
-Take your parallel `lapply()` code and wrap it up in a function
-`parallel_lapply()` that takes two arguments `X` and `FUN` so that we
-can call:
-
-```{r}
-#| eval: false
-library(future)
-plan(multisession)
-
-xs <- list(1:5, 6:10, 11:15, 16:20)
-
-ys <- parallel_lapply(xs, slow_sum)
-ys <- unlist(ys)
-y <- sum(ys)
-```
 
 
 [Futureverse]: https://www.futureverse.org/
