@@ -424,6 +424,23 @@ Note
 </div>
 <p><em>Did you get a warning? By the way, how do you think the parallel worker that runs in the background and evalutes <code>log(x)</code> knows what the value of <code>x</code> is?</em></p>
 </section>
+<section id="our-own-parallel-lapply" class="level3">
+<h3 class="anchored" data-anchor-id="our-own-parallel-lapply">Our own parallel lapply</h3>
+<p><strong>Task 12:</strong></p>
+<p>Above, you used a for-loop to parallelize tasks. See if you can achieve the same using <code>lapply()</code> instead.</p>
+<p><strong>Task 13:</strong></p>
+<p>Take your parallel <code>lapply()</code> code and wrap it up in a function <code>parallel_lapply()</code> that takes two arguments <code>X</code> and <code>FUN</code> so that we can call:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">parallel_lapply</span>(xs, slow_sum)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 
 </main>
