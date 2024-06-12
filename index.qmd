@@ -328,7 +328,7 @@ achieve the same using `lapply()` instead.
 **Task `{r} task()`:**
 
 Take your parallel `lapply()` code and wrap it up in a function
-`parallel_lapply()` that takes two arguments `X` and `fun` so that we
+`parallel_lapply()` that takes two arguments `X` and `FUN` so that we
 can call:
 
 ```{r}
@@ -344,11 +344,11 @@ y <- sum(ys)
 ```
 
 <!--
-parallel_lapply <- function(X, fun) {
-  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
-  fs <- lapply(X, FUN = function(x) {
-    ## For element 'x', create future that calls fun(x)
-    future(fun(x))
+parallel_lapply <- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs <- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
   })
   
   ## Collect the values from all futures
@@ -461,11 +461,11 @@ Comment: Expand the following for a working version of
 <details>
 <summary>parallel_lapply()</summary>
 <pre>
-parallel_lapply <- function(X, fun) {
-  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
-  fs <- lapply(X, FUN = function(x) {
-    ## For element 'x', create future that calls fun(x)
-    future(fun(x))
+parallel_lapply <- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs <- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
   })
   
   ## Collect the values from all futures
