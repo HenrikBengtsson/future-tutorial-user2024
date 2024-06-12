@@ -429,7 +429,7 @@ toc()
 <p><strong>Task 8:</strong></p>
 <p>Above, you used a for-loop to parallelize tasks. See if you can achieve the same using <code>lapply()</code> instead.</p>
 <p><strong>Task 9:</strong></p>
-<p>Take your parallel <code>lapply()</code> code and wrap it up in a function <code>parallel_lapply()</code> that takes two arguments <code>X</code> and <code>fun</code> so that we can call:</p>
+<p>Take your parallel <code>lapply()</code> code and wrap it up in a function <code>parallel_lapply()</code> that takes two arguments <code>X</code> and <code>FUN</code> so that we can call:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
@@ -441,11 +441,11 @@ toc()
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!--
-parallel_lapply <- function(X, fun) {
-  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
-  fs <- lapply(X, FUN = function(x) {
-    ## For element 'x', create future that calls fun(x)
-    future(fun(x))
+parallel_lapply <- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs <- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
   })
   
   ## Collect the values from all futures
@@ -523,11 +523,11 @@ Note
 <summary>
 parallel_lapply()
 </summary>
-<pre>parallel_lapply &lt;- function(X, fun) {
-  ## Create futures that calls fun(X[[1]]), fun(X[[2]]), ...
-  fs &lt;- lapply(X, FUN = function(x) {
-    ## For element 'x', create future that calls fun(x)
-    future(fun(x))
+<pre>parallel_lapply &lt;- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs &lt;- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
   })
   
   ## Collect the values from all futures
