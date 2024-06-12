@@ -24,6 +24,7 @@ jobs:
           
       - name: Install R packages
         run: |
+           chooseCRANmirror(ind = 1)
            install.packages(c("rmarkdown", "future"))
         shell: Rscript {0}
  
