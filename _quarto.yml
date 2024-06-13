@@ -8,8 +8,8 @@ website:
     left:
       - text: "Part 1 (2024-06-12)"
         menu:
-          - text: "Slides Part 1"
-            url:  https://docs.google.com/presentation/d/e/2PACX-1vRD2i8CC0faaQkeWZJMrWdOLYV7H5ibp6yN7mVHXbLl_paJYb7-Gs62owgoowKm6ywCvgCSIVn-ycPV/pub?start=false&loop=false&delayms=60000#slide=id.ga27fac03c6_0_0
+          - text: "Slides Part 1 (pdf)"
+            url:  BengtssonH_20240612-futureverse-part1-raukR_2024.pdf
           - text: "Lab 1"
             href: lab1.qmd
         
