@@ -7,9 +7,11 @@ name: Quarto Publish
 
 jobs:
   build-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    
     permissions:
       contents: write
+      
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -24,7 +26,13 @@ jobs:
           
       - name: Install R packages
         run: |
-           chooseCRANmirror(ind = 1)
+           options(repos = "https://packagemanager.posit.co/cran/__linux__/jammy/latest")
+           options(
+             HTTPUserAgent = sprintf("R/%s R (%s)",
+               getRversion(),
+               paste(getRversion(), R.version$platform, R.version$arch, R.version$os)
+             )
+           )
            install.packages(c("rmarkdown", "future"))
            cat(file = "CNAME", "now.futureverse.org")
         shell: Rscript {0}
