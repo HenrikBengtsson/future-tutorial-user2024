@@ -1,0 +1,601 @@
+---
+title: "Lab: Futureverse 2"
+author: "Henrik Bengtsson"
+description: "Speed up your code through parallel computing"
+image: "assets/featured.jpg"
+format: html
+---
+
+```{r, echo = FALSE}
+task_count <- 0L
+task <- function() {
+  task_count <<- task_count + 1L
+  task_count
+}
+```
+
+```{r, echo = FALSE}
+slow_sum <- base::sum
+```
+
+::: {.callout-note}
+
+This is the second of two parallelization labs. It will take you
+through **[Futureverse]** functions that you and others are likely to
+use to parallelize R code.  We will cover the **future.apply**
+package, **furrr** package, and **foreach** with the **DoFuture**
+package. In your R career, you pick whichever you prefer - they are
+all equally good.
+
+You are highly encouraged to test things out yourself and tweak things
+to figure out how these methods behave.
+
+Slides: ['Futureverse: A Unifying Parallelization Framework in R for
+Everyone - Part 2'](BengtssonH_20240612-futureverse-part2-raukR_2024.pdf)
+
+:::
+
+
+
+## Install
+
+It is assumed that you have already installed common Futureverse
+packages in Lab 1. If not, install them now as:
+
+```{r}
+#| eval: false
+install.packages("futureverse")
+```
+
+
+## Recap from Lab 1
+
+In the first part - Lab 1 - we learned about the `future()` and
+`value()` functions part of the **[future]** package.  They allow us
+to run independent tasks is parallel, e.g.
+
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:50, 51:100)
+fa <- future(slow_sum(xs[[1]]))
+fb <- future(slow_sum(xs[[2]]))
+a <- value(fa)
+b <- value(fb)
+y <- a + b
+y
+```
+
+If you end up using this `future()`/`value()`-style of parllelization
+frequently, you might be interested in `%<-%`, which combines the two
+in a easy-to-read fashion.  We refer to `%<-%` as the _future_
+assignment operator, because it closely resembles regular `<-`
+assignment operator. Not always, but in many cases we can just replace
+`<-` with `%<-%` to call a function, or evaluate some expression in
+parallel.  Try this with:
+
+```{r}
+xs <- list(1:50, 51:100)
+a <- slow_sum(xs[[1]])
+b <- slow_sum(xs[[2]])
+y <- a + b
+y
+```
+
+Think carefully which of the `<-` assignment operators you want to
+parallelize. We don't want to over do it!
+
+<details>
+<summary>Solution</summary>
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:50, 51:100)
+a %<-% slow_sum(xs[[1]])
+b %<-% slow_sum(xs[[2]])
+y <- a + b
+y
+```
+</details>
+
+
+## Parallel versions of base::lapply() and purrr::map()
+
+At the end of Lab 1, we learned how write our own parallel version of
+`lapply()` using `future()` and `value()`.  We started by using for
+loop to create the futures (= the parallel tasks), but then we noticed
+that we could create them using `lapply()` instead.
+
+```{r}
+parallel_lapply <- function(X, FUN) {
+  fs <- lapply(X, function(x) {
+    future(FUN(x))
+  })
+  value(fs)
+}
+```
+
+Here `value(fs)` will internally call `lapply(fs, value)`. For the
+sake of what follows, let us explicity use that form;
+
+```{r}
+parallel_lapply <- function(X, FUN) {
+  fs <- lapply(X, function(x) {
+    future(FUN(x))
+  })
+  lapply(fs, value)
+}
+```
+
+We can the use this to apply a function to each of the elements of a
+list in parallel, e.g.
+
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- parallel_lapply(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+y
+```
+
+
+**Task `{r} task()`:**
+
+Write a `parallel_map()` function that emulates what the `map()`
+function of the **purrr** package does while running in parallel using
+future. I recommend that you modify the existing
+`parallel_lapply()`. Verify that it works with:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- parallel_map(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+y
+```
+
+
+<details>
+<summary>Solution</summary>
+```{r}
+library(purrr)
+
+parallel_map <- function(X, FUN) {
+  fs <- map(X, function(x) {
+    future(FUN(x))
+  })
+  map(fs, value)
+}
+```
+</details>
+
+```{r, echo=FALSE}
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- parallel_map(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+stopifnot(y == 5050)
+```
+
+
+**Task `{r} task()`:**
+
+Just like `lapply()` and `map()` return list, `parallel_lapply()` and
+`parallel_map()` return lists. But, as in our example, it's common
+that one wants the _atomic vector_ version of it, which is why we do:
+
+```{r}
+ys <- unlist(ys)
+ys
+```
+
+Having to call this each time is tedious and adds friction and noise
+to our code.  When not parallelizing, we can use **purrr**'s
+`map_dbl()` to achieve the same in a one go;
+
+```{r}
+library(purrr)
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- map_dbl(xs, slow_sum)
+y <- sum(ys)
+y
+```
+
+Write your own `parallel _map_dbl()` that achieves the same, but via
+futures, so that you can run:
+
+```{r}
+#| eval: false
+library(purrr)
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- parallel_map_dbl(xs, slow_sum)
+y <- sum(ys)
+y
+```
+
+_Hint: Don't use `unlist()` - instead make use of `map_dbl()`. But
+think carefully where in your function you want to use `map_dbl()`._
+
+```{r}
+library(purrr)
+
+parallel_map_dbl <- function(X, FUN) {
+  fs <- map(X, function(x) {
+    future(FUN(x))
+  })
+  map_dbl(fs, value)
+}
+```
+
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- parallel_map_dbl(xs, slow_sum)
+str(ys)
+y <- sum(ys)
+y
+```
+
+_How long did the creation of the future take?_
+
+<!-- It took a long time, because `future()` is blocking with
+plan(sequential) -->
+
+
+**Task `{r} task()`:**
+
+By design, Futureverse runs everything sequentially by default. We can
+configure it run code in parallel using two background workers as:
+
+```{r}
+#| eval: false
+plan(multisession, workers = 2)
+```
+
+_Make this change, and rerun the above example. Did the different
+steps take as long as you expected? What do you think the reason is
+for the change?_
+
+<!-- The `future()` call is swift, because it is non-blocking when
+using a parallel backend. The total processing time, however, is still
+the same, because `future()` is evaluating the expression in
+a single parallel worker. -->
+
+
+**Task `{r} task()`:**
+
+Let's calculate $1 + 2 + \ldots + 10$ in two steps: (a) $1 + 2 +
+\ldots + 5$ and (b) $6 + 7 + \ldots + 10$, and then sum the two
+results.
+
+```{r}
+#| eval: false
+fa <- future(slow_sum(1:5))
+fb <- future(slow_sum(6:10))
+y <- value(fa) + value(fb)
+y
+```
+
+But first, make sure to add `toc()` after each statement to better
+understand how long each step takes;
+
+```{r}
+#| eval: false
+tic()
+fa <- future(slow_sum(1:5))
+toc()
+fb <- future(slow_sum(6:10))
+toc()
+y <- value(fa) + value(fb)
+toc()
+y
+toc()
+```
+
+_Make sure you get the expected result. Did it finish sooner? Which
+step takes the longest? Why do you think that is?_
+
+<!-- Both `future()` calls are swift, because they are non-blocking
+when using a parallel backend. However, `y <- value(fa) + value(fb)`
+blocks, because it waits for the values of future `fa` and future `fb`
+to be available. The total processing time is five seconds. -->
+
+
+### Create many parallel tasks via a for loop
+
+**Task `{r} task()`:**
+
+Here is a very complicated way of calculating the sum $1 + 2 + \ldots
++ 20$ in four chunks and outputting messages to show the progress:
+
+```{r}
+#| eval: false
+tic()
+xs <- list(1:5, 6:10, 11:15, 16:20)
+ys <- list()
+for (ii in seq_along(xs)) {
+  message(paste0("Iteration ", ii))
+  ys[[ii]] <- slow_sum(xs[[ii]])
+}
+message("Done")
+print(ys)
+
+ys <- unlist(ys)
+ys
+
+y <- sum(ys)
+y
+toc()
+```
+
+Rewrite it such that each iteration is parallelized via a future. Use
+four parallel workers as in:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession, workers = 4)
+```
+
+<!--
+
+library(future)
+plan(multisession, workers = 4)
+
+tic()
+
+xs <- list(1:5, 6:10, 11:15, 16:20)
+
+fs <- list()
+for (ii in seq_along(xs)) {
+  message(paste0("Iteration ", ii))
+  fs[[ii]] <- future( slow_sum(xs[[ii]]) )
+}
+message("Done")
+
+ys <- value(fs)
+ys <- unlist(ys)
+ys               ## [1] 15 40 65 90
+y <- sum(ys)
+y                ## 210
+
+toc()
+-->
+
+
+**Task `{r} task()`:**
+
+Retry with three parallel workers as in:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession, workers = 3)
+```
+
+_Did you notice something?  What do you think happened?_
+
+
+### Our own parallel lapply
+
+**Task `{r} task()`:**
+
+Above, you used a for-loop to parallelize tasks. See if you can
+achieve the same using `lapply()` instead.
+
+
+**Task `{r} task()`:**
+
+Take your parallel `lapply()` code and wrap it up in a function
+`parallel_lapply()` that takes two arguments `X` and `FUN` so that we
+can call:
+
+```{r}
+#| eval: false
+library(future)
+plan(multisession)
+
+xs <- list(1:5, 6:10, 11:15, 16:20)
+
+ys <- parallel_lapply(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+```
+
+<!--
+parallel_lapply <- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs <- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
+  })
+  
+  ## Collect the values from all futures
+  value(fs)
+}
+-->
+
+### Errors and parallel processing
+
+The Futureverse has been designed such that your experience running
+parallel code will be as close as possible to when you run regular,
+sequential code. For example, if we call:
+
+```{r, error = TRUE}
+x <- "1.2"
+y <- log(x)
+```
+
+we get an error.
+
+**Task `{r} task()`:**
+
+If we try the same with a future, it's natural to expect the same error;
+
+```{r, error = TRUE}
+#| eval: false
+f <- future(log(x))
+```
+
+_Run the above. Did you get an error or not? What could be the reason
+for that?_
+
+<!-- We will not get an error until we collect the results, which only
+happens when we try to get the value of `f`. -->
+
+_If we try to get the value of `f` as in_
+
+
+```{r, error = TRUE}
+#| eval: false
+y <- value(f)
+```
+
+_what happens?_
+
+<!-- Here we are requesting the value of `f`, which will trigger the
+error to be signalled. -->
+
+
+::: {.callout-note}
+
+At first, it might appear obvious that we should get an error in these
+cases and that it will look the same as when running regular
+sequential code. But rest assured, Futureverse is the only parallel
+framework that behave this way. If you use one of the traditional
+frameworks you will get a different type of error, or not an error at
+all. This is the case for `parLapply()` and `mclapply()` of
+**parallel** as well as for `foreach()` and `%dopar%` of **foreach**.
+
+:::
+
+
+**Task `{r} task()`:**
+
+Try with the following sequential code:
+
+```{r, error = TRUE}
+#| eval: false
+X <- list("1.2", 42)
+y <- lapply(X, log)
+```
+
+_Did you get an error?_
+
+
+**Task `{r} task()`:**
+
+Next, try the same but with `mclapply()` of the **parallel**
+package;
+
+```{r, error = TRUE}
+#| eval: false
+library(parallel)
+
+X <- list("1.2", 42)
+y <- mclapply(X, log)
+```
+
+_What happened - did you get an error?_
+
+_What do you get if you look at `y`, e.g. `print(y)` or `str(y)`?_
+
+
+**Task `{r} task()`:**
+
+Finally, try the same but with your `parallel_lapply()` that uses Futureverse:
+
+```{r, error = TRUE}
+#| eval: false
+library(future)
+plan(multisession)
+
+X <- list("1.2", 42)
+y <- parallel_lapply(X, log)
+```
+
+Comment: Expand the following for a working version of
+`parallel_lapply()`.
+
+<details>
+<summary>parallel_lapply()</summary>
+<pre>
+parallel_lapply <- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs <- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
+  })
+  
+  ## Collect the values from all futures
+  value(fs)
+}
+</pre>
+</details>
+
+_Did you get an error?_
+
+
+
+
+**Task `{r} task()`:**
+
+Let's continue with our future-based example. What do you think the
+behavior is if we switch back to sequential processing using:
+
+```{r, error = TRUE}
+#| eval: false
+plan(sequential)
+
+f <- future(log(x))
+y <- value(f)
+```
+
+? Try it. _What do you observe? Did you expect something different?
+Did the error happen already when calling `future()` or when calling
+`value()`?_
+
+When done, make sure to switch back to parallel processing again:
+
+```{r}
+#| eval: false
+plan(multisession, workers = 2)
+```
+
+
+### Warnings and parallel processing
+
+Just like errors, warnings are signalled as-is when parallelizing via
+futures.
+
+**Task `{r} task()`:**
+
+Try the following:
+
+```{r}
+#| eval: false
+x <- c(1.2, -0.5)
+f <- future(log(x))
+y <- value(f)
+y
+```
+
+_Did you get a warning? By the way, how do you think the parallel
+worker that runs in the background and evalutes `log(x)` knows what
+the value of `x` is?_
+
+
+
+[Futureverse]: https://www.futureverse.org/
+[future]: https://future.futureverse.org/

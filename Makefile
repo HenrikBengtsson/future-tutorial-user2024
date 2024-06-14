@@ -6,3 +6,7 @@ publish:
 	git commit -am "CNAME"
 	git push
 	git checkout main
+
+preview:
+	quarto preview lab2.qmd
+
