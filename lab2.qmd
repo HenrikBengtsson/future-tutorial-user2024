@@ -16,6 +16,9 @@ task <- function() {
 
 ```{r, echo = FALSE}
 slow_sum <- base::sum
+
+## Allow workers = 4, even if we only have access to two cores
+options(parallelly.maxWorkers.localhost = c(Inf, Inf))
 ```
 
 ::: {.callout-note}
