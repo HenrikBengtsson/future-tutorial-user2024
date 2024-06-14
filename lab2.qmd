@@ -303,6 +303,7 @@ y <- log(x)
 
 we get an error.
 
+
 **Task `{r} task()`:**
 
 Try the same using the future assignment operator `%<-%`;
@@ -344,6 +345,8 @@ _What happens?_
 error to be signalled. -->
 
 
+**Task `{r} task()`:**
+
 Ask for the value one more time;
 
 ```{r, error = TRUE}
@@ -352,6 +355,37 @@ y <- value(f)
 ```
 
 _What happens now?_  What if you keep calling `value(f)` over and over?
+
+
+
+**Task `{r} task()`:**
+
+If we **purrr** as in:
+
+```{r, error = TRUE}
+library(purrr)
+
+xs <- list(42, "1.2", 3.14)
+y <- map_dbl(xs, log)
+```
+
+we get an error, because the second element of the `xs` list holds a
+string instead of a numeric value.  That is what the error message
+tries to explain to us.
+
+Let's try with our `parallel_map_dbl()` function from above.
+
+```{r, error = TRUE}
+#| eval: false
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(42, "1.2", 3.14)
+y <- parallel_map_dbl(xs, log)
+```
+
+_Does it behave as you expected? Do you notice anything different? If
+so, let's talk about it._
 
 
 
@@ -370,95 +404,51 @@ all. This is the case for `parLapply()` and `mclapply()` of
 
 **Task `{r} task()`:**
 
-Try with the following sequential code:
-
-```{r, error = TRUE}
-#| eval: false
-X <- list("1.2", 42)
-y <- lapply(X, log)
-```
-
-_Did you get an error?_
-
-
-**Task `{r} task()`:**
-
 Next, try the same but with `mclapply()` of the **parallel**
 package;
+
+```{r, echo = FALSE}
+suppressWarnings(rm(list = c("xs", "ys")))
+```
 
 ```{r, error = TRUE}
 #| eval: false
 library(parallel)
 
-X <- list("1.2", 42)
-y <- mclapply(X, log)
+xs <- list("1.2", 42)
+ys <- mclapply(xs, log)
+print(ys)
 ```
 
-_What happened - did you get an error?_
-
-_What do you get if you look at `y`, e.g. `print(y)` or `str(y)`?_
-
-
-**Task `{r} task()`:**
-
-Finally, try the same but with your `parallel_lapply()` that uses Futureverse:
-
-```{r, error = TRUE}
-#| eval: false
-library(future)
-plan(multisession)
-
-X <- list("1.2", 42)
-y <- parallel_lapply(X, log)
-```
-
-Comment: Expand the following for a working version of
-`parallel_lapply()`.
-
-<details>
-<summary>parallel_lapply()</summary>
-<pre>
-parallel_lapply <- function(X, FUN) {
-  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
-  fs <- lapply(X, function(x) {
-    ## For element 'x', create future that calls FUN(x)
-    future(FUN(x))
-  })
-  
-  ## Collect the values from all futures
-  value(fs)
-}
-</pre>
-</details>
-
-_Did you get an error?_
-
+_What happened - did you get an error? With the behavior you observed,
+would you be able figure out what is wrong?  Also, what is the risk
+with the current behavior?_
 
 
 
 **Task `{r} task()`:**
 
-Let's continue with our future-based example. What do you think the
-behavior is if we switch back to sequential processing using:
+Next, try the same but with `parLapply()` of the **parallel** package;
+
+```{r, echo = FALSE}
+suppressWarnings(rm(list = c("xs", "ys")))
+```
 
 ```{r, error = TRUE}
 #| eval: false
-plan(sequential)
+library(parallel)
+workers <- makeCluster(4)
 
-f <- future(log(x))
-y <- value(f)
+xs <- list("1.2", 42)
+ys <- parLapply(xs, log, cl = workers)
+print(ys)
+
+stopCluster(workers)
 ```
 
-? Try it. _What do you observe? Did you expect something different?
-Did the error happen already when calling `future()` or when calling
-`value()`?_
+_What happened - did you get an error? With the behavior you
+observed, would you be able figure out what is wrong?_
 
-When done, make sure to switch back to parallel processing again:
-
-```{r}
-#| eval: false
-plan(multisession, workers = 2)
-```
 
 
 ### Warnings and parallel processing
