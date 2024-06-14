@@ -48,7 +48,9 @@ install.packages("futureverse")
 ```
 
 
-## Recap from Lab 1
+## Exercises
+
+### Recap from Lab 1
 
 In the first part - Lab 1 - we learned about the `future()` and
 `value()` functions part of the **[future]** package.  They allow us
@@ -101,7 +103,7 @@ y
 </details>
 
 
-## Parallel versions of base::lapply() and purrr::map()
+### Parallel versions of purrr::map()
 
 At the end of Lab 1, we learned how write our own parallel version of
 `lapply()` using `future()` and `value()`.  We started by using for
@@ -147,8 +149,8 @@ y
 **Task `{r} task()`:**
 
 Write a `parallel_map()` function that emulates what the `map()`
-function of the **purrr** package does while running in parallel using
-future. I recommend that you modify the existing
+function of the **purrr** package does, while at the same tme running
+in parallel using futures. I recommend that you modify the existing
 `parallel_lapply()`. Verify that it works with:
 
 ```{r}
@@ -210,7 +212,7 @@ y <- sum(ys)
 y
 ```
 
-Write your own `parallel _map_dbl()` that achieves the same, but via
+Write your own `parallel_map_dbl()` that achieves the same, but via
 futures, so that you can run:
 
 ```{r}
@@ -225,6 +227,8 @@ y
 _Hint: Don't use `unlist()` - instead make use of `map_dbl()`. But
 think carefully where in your function you want to use `map_dbl()`._
 
+<details>
+<summary>Solution</summary>
 ```{r}
 library(purrr)
 
@@ -235,196 +239,56 @@ parallel_map_dbl <- function(X, FUN) {
   map_dbl(fs, value)
 }
 ```
+</details>
 
+
+By now, you probably have one `map()` and one `map_dbl()` inside your
+function. It is helpful to point out that it is the `map_dbl()` one
+that makes `parallel_map_dbl()` emulate what `purrr::map_dbl()` does.
+The other `map()` is just used to create our futures and put them in a
+list.  We could equally well use `lapply()` for that. We could even
+use a for loop as we used in Lab 1.  Because of this, all of the
+following alternative solutions work equally well:
+
+
+<details>
+<summary>Solution 1</summary>
 ```{r}
-library(future)
-plan(multisession, workers = 4)
-
-xs <- list(1:25, 26:50, 51:75, 76:100)
-ys <- parallel_map_dbl(xs, slow_sum)
-str(ys)
-y <- sum(ys)
-y
-```
-
-_How long did the creation of the future take?_
-
-<!-- It took a long time, because `future()` is blocking with
-plan(sequential) -->
-
-
-**Task `{r} task()`:**
-
-By design, Futureverse runs everything sequentially by default. We can
-configure it run code in parallel using two background workers as:
-
-```{r}
-#| eval: false
-plan(multisession, workers = 2)
-```
-
-_Make this change, and rerun the above example. Did the different
-steps take as long as you expected? What do you think the reason is
-for the change?_
-
-<!-- The `future()` call is swift, because it is non-blocking when
-using a parallel backend. The total processing time, however, is still
-the same, because `future()` is evaluating the expression in
-a single parallel worker. -->
-
-
-**Task `{r} task()`:**
-
-Let's calculate $1 + 2 + \ldots + 10$ in two steps: (a) $1 + 2 +
-\ldots + 5$ and (b) $6 + 7 + \ldots + 10$, and then sum the two
-results.
-
-```{r}
-#| eval: false
-fa <- future(slow_sum(1:5))
-fb <- future(slow_sum(6:10))
-y <- value(fa) + value(fb)
-y
-```
-
-But first, make sure to add `toc()` after each statement to better
-understand how long each step takes;
-
-```{r}
-#| eval: false
-tic()
-fa <- future(slow_sum(1:5))
-toc()
-fb <- future(slow_sum(6:10))
-toc()
-y <- value(fa) + value(fb)
-toc()
-y
-toc()
-```
-
-_Make sure you get the expected result. Did it finish sooner? Which
-step takes the longest? Why do you think that is?_
-
-<!-- Both `future()` calls are swift, because they are non-blocking
-when using a parallel backend. However, `y <- value(fa) + value(fb)`
-blocks, because it waits for the values of future `fa` and future `fb`
-to be available. The total processing time is five seconds. -->
-
-
-### Create many parallel tasks via a for loop
-
-**Task `{r} task()`:**
-
-Here is a very complicated way of calculating the sum $1 + 2 + \ldots
-+ 20$ in four chunks and outputting messages to show the progress:
-
-```{r}
-#| eval: false
-tic()
-xs <- list(1:5, 6:10, 11:15, 16:20)
-ys <- list()
-for (ii in seq_along(xs)) {
-  message(paste0("Iteration ", ii))
-  ys[[ii]] <- slow_sum(xs[[ii]])
-}
-message("Done")
-print(ys)
-
-ys <- unlist(ys)
-ys
-
-y <- sum(ys)
-y
-toc()
-```
-
-Rewrite it such that each iteration is parallelized via a future. Use
-four parallel workers as in:
-
-```{r}
-#| eval: false
-library(future)
-plan(multisession, workers = 4)
-```
-
-<!--
-
-library(future)
-plan(multisession, workers = 4)
-
-tic()
-
-xs <- list(1:5, 6:10, 11:15, 16:20)
-
-fs <- list()
-for (ii in seq_along(xs)) {
-  message(paste0("Iteration ", ii))
-  fs[[ii]] <- future( slow_sum(xs[[ii]]) )
-}
-message("Done")
-
-ys <- value(fs)
-ys <- unlist(ys)
-ys               ## [1] 15 40 65 90
-y <- sum(ys)
-y                ## 210
-
-toc()
--->
-
-
-**Task `{r} task()`:**
-
-Retry with three parallel workers as in:
-
-```{r}
-#| eval: false
-library(future)
-plan(multisession, workers = 3)
-```
-
-_Did you notice something?  What do you think happened?_
-
-
-### Our own parallel lapply
-
-**Task `{r} task()`:**
-
-Above, you used a for-loop to parallelize tasks. See if you can
-achieve the same using `lapply()` instead.
-
-
-**Task `{r} task()`:**
-
-Take your parallel `lapply()` code and wrap it up in a function
-`parallel_lapply()` that takes two arguments `X` and `FUN` so that we
-can call:
-
-```{r}
-#| eval: false
-library(future)
-plan(multisession)
-
-xs <- list(1:5, 6:10, 11:15, 16:20)
-
-ys <- parallel_lapply(xs, slow_sum)
-ys <- unlist(ys)
-y <- sum(ys)
-```
-
-<!--
-parallel_lapply <- function(X, FUN) {
-  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
-  fs <- lapply(X, function(x) {
-    ## For element 'x', create future that calls FUN(x)
+parallel_map_dbl <- function(X, FUN) {
+  fs <- purrr::map(X, function(x) {
     future(FUN(x))
   })
-  
-  ## Collect the values from all futures
-  value(fs)
+  purrr::map_dbl(fs, value)
 }
--->
+```
+</details>
+
+<details>
+<summary>Solution 2</summary>
+```{r}
+parallel_map_dbl <- function(X, FUN) {
+  fs <- lapply(X, function(x) {
+    future(FUN(x))
+  })
+  purrr::map_dbl(fs, value)
+}
+```
+</details>
+
+<details>
+<summary>Solution 3</summary>
+```{r}
+parallel_map_dbl <- function(X, FUN) {
+  fs <- list()
+  for (ii in seq_along(X)) {
+    x <- X[[ii]]
+    fs[[ii]] <- future(FUN(x))
+  }
+  purrr::map_dbl(fs, value)
+}
+```
+</details>
+
 
 ### Errors and parallel processing
 
@@ -441,31 +305,54 @@ we get an error.
 
 **Task `{r} task()`:**
 
-If we try the same with a future, it's natural to expect the same error;
+Try the same using the future assignment operator `%<-%`;
+
+```{r, error = TRUE}
+#| eval: false
+y %<-% log(x)
+y
+```
+
+_Do you get an error?_  Notice how similar it works to `<-`.
+
+
+**Task `{r} task()`:**
+
+Try the same, but now split up the `%<-%` into a `future()` and a
+`value()` call. Start by calling:
 
 ```{r, error = TRUE}
 #| eval: false
 f <- future(log(x))
 ```
 
-_Run the above. Did you get an error or not? What could be the reason
-for that?_
+_Did you get an error or not? What could be the reason for that?_
 
 <!-- We will not get an error until we collect the results, which only
 happens when we try to get the value of `f`. -->
 
-_If we try to get the value of `f` as in_
-
+Next, ask for the value of the future;
 
 ```{r, error = TRUE}
 #| eval: false
 y <- value(f)
 ```
 
-_what happens?_
+_What happens?_
 
 <!-- Here we are requesting the value of `f`, which will trigger the
 error to be signalled. -->
+
+
+Ask for the value one more time;
+
+```{r, error = TRUE}
+#| eval: false
+y <- value(f)
+```
+
+_What happens now?_  What if you keep calling `value(f)` over and over?
+
 
 
 ::: {.callout-note}

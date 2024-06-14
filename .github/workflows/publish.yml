@@ -33,7 +33,7 @@ jobs:
                paste(getRversion(), R.version$platform, R.version$arch, R.version$os)
              )
            )
-           install.packages(c("rmarkdown", "future"))
+           install.packages(c("rmarkdown", "futureverse"))
         shell: Rscript {0}
  
       - name: Render and Publish
