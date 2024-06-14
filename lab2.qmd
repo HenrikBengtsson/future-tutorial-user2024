@@ -461,19 +461,47 @@ futures.
 
 **Task `{r} task()`:**
 
-Try the following:
-
 ```{r}
 #| eval: false
-x <- c(1.2, -0.5)
-f <- future(log(x))
-y <- value(f)
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(42, -1.2, 3.14)
+y <- parallel_map_dbl(xs, log)
 y
 ```
 
-_Did you get a warning? By the way, how do you think the parallel
-worker that runs in the background and evalutes `log(x)` knows what
-the value of `x` is?_
+_Did you get a warning?_
+
+
+**Task `{r} task()`:**
+
+Try the same with `mclapply()`;
+
+```{r}
+#| eval: false
+library(parallel)
+xs <- list(42, -1.2, 3.14)
+y <- mclapply(xs, log)
+y
+```
+
+_Did you get a warning?_
+
+
+Then, try with `parLapply()`;
+
+```{r}
+#| eval: false
+library(parallel)
+workers <- makeCluster(4)
+xs <- list(42, -1.2, 3.14)
+y <- parLapply(xs, log, cl = workers)
+y
+stopCluster(workers)
+```
+
+_Did you get a warning?_
 
 
 
