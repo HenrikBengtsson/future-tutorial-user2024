@@ -351,6 +351,42 @@ parallel_map_dbl <- function(.x, .f) {
 </details>
 
 
+
+### Things that are problematic
+
+**Task `{r} task()`:**
+
+Run the following:
+
+```{r}
+#| eval: false
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- list()
+purrr::map(seq_along(xs), function(ii) {
+  ys[[ii]] <- slow_sum(xs[[ii]])
+})
+ys
+```
+
+_Why doesn't it work?_
+
+
+**Task `{r} task()`:**
+
+_Do you think the following can be parallelized?_
+
+```{r}
+#| eval: false
+ys <- list()
+y <- 0
+for (ii in 2:length(xs)) {
+  x <- xs[[ii]]
+  y <- ys[[ii - 1]]
+  ys[[ii]] <- slow_sum(x + y)
+}
+```
+
+
 ### Errors and parallel processing
 
 The Futureverse has been designed such that your experience running
@@ -364,22 +400,6 @@ y <- log(x)
 
 we get an error.
 
-
-<!--
-
-**Task `{r} task()`:**
-
-Try the same using the future assignment operator `%<-%`;
-
-```{r, error = TRUE}
-#| eval: false
-y %<-% log(x)
-y
-```
-
-_Do you get an error?  How did it differ from `<-`?_
-
--->
 
 
 **Task `{r} task()`:**
