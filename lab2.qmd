@@ -26,7 +26,7 @@ options(parallelly.maxWorkers.localhost = c(Inf, Inf))
 This is the second of two parallelization labs. It will take you
 through **[Futureverse]** functions that you and others are likely to
 use to parallelize R code.  We will cover the **future.apply**
-package, **furrr** package, and **foreach** with the **DoFuture**
+package, **furrr** package, and **foreach** with the **doFuture**
 package. In your R career, you pick whichever you prefer - they are
 all equally good.
 
@@ -57,73 +57,101 @@ install.packages("futureverse")
 
 In the first part - Lab 1 - we learned about the `future()` and
 `value()` functions part of the **[future]** package.  They allow us
-to run independent tasks is parallel, e.g.
+to run independent tasks like:
 
 ```{r}
-library(future)
-plan(multisession, workers = 4)
-
-xs <- list(1:50, 51:100)
-fa <- future(slow_sum(xs[[1]]))
-fb <- future(slow_sum(xs[[2]]))
-a <- value(fa)
-b <- value(fb)
-y <- a + b
-y
-```
-
-If you end up using this `future()`/`value()`-style of parllelization
-frequently, you might be interested in `%<-%`, which combines the two
-in a easy-to-read fashion.  We refer to `%<-%` as the _future_
-assignment operator, because it closely resembles regular `<-`
-assignment operator. Not always, but in many cases we can just replace
-`<-` with `%<-%` to call a function, or evaluate some expression in
-parallel.  Try this with:
-
-```{r}
-xs <- list(1:50, 51:100)
+xs <- list(1:25, 26:50, 51:75, 76:100)
 a <- slow_sum(xs[[1]])
 b <- slow_sum(xs[[2]])
-y <- a + b
+c <- slow_sum(xs[[3]])
+d <- slow_sum(xs[[4]])
+y <- a + b + c + d
 y
 ```
 
-Think carefully which of the `<-` assignment operators you want to
-parallelize. We don't want to over do it!
+in parallel. We learned how to do:
 
-<details>
-<summary>Solution</summary>
 ```{r}
 library(future)
 plan(multisession, workers = 4)
 
-xs <- list(1:50, 51:100)
-a %<-% slow_sum(xs[[1]])
-b %<-% slow_sum(xs[[2]])
-y <- a + b
+xs <- list(1:25, 26:50, 51:75, 76:100)
+fa <- future(slow_sum(xs[[1]]))
+fb <- future(slow_sum(xs[[2]]))
+fc <- future(slow_sum(xs[[3]]))
+fd <- future(slow_sum(xs[[4]]))
+y <- value(fa) + value(fb) + value(fc) + value(fd)
 y
 ```
-</details>
 
 
-### Parallel versions of purrr::map()
-
-At the end of Lab 1, we learned how write our own parallel version of
-`lapply()` using `future()` and `value()`.  We started by using for
-loop to create the futures (= the parallel tasks), but then we noticed
-that we could create them using `lapply()` instead.
+We then learned how to generalize this to a for-loop, by realizing we
+can do:
 
 ```{r}
-parallel_lapply <- function(X, FUN) {
-  fs <- lapply(X, function(x) {
-    future(FUN(x))
-  })
-  value(fs)
-}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+
+fs <- list()
+fs[[1]] <- future(slow_sum(xs[[1]]))
+fs[[2]] <- future(slow_sum(xs[[2]]))
+fs[[3]] <- future(slow_sum(xs[[3]]))
+fs[[4]] <- future(slow_sum(xs[[4]]))
+
+ys <- list()
+ys[[1]] <- value(fs[[1]])
+ys[[2]] <- value(fs[[2]])
+ys[[3]] <- value(fs[[3]])
+ys[[4]] <- value(fs[[4]])
+
+ys <- unlist(ys)
+y <- sum(ys)
+y
 ```
 
-Here `value(fs)` will internally call `lapply(fs, value)`. For the
-sake of what follows, let us explicity use that form;
+and then simplify as:
+
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+
+fs <- list()
+for (ii in seq_along(xs)) {
+  fs[[ii]] <- future(slow_sum(xs[[ii]]))
+}
+
+ys <- list()
+for (ii in seq_along(fs)) {
+  ys[[ii]] <- value(fs[[ii]])
+}
+
+ys <- unlist(ys)
+y <- sum(ys)
+y
+```
+
+We then got rid of the for-loops in the auxillary index `ii`, by using
+`lapply()`:
+
+```{r}
+library(future)
+plan(multisession, workers = 4)
+
+xs <- list(1:25, 26:50, 51:75, 76:100)
+
+fs <- lapply(xs, function(x) { future(slow_sum(x)) })
+ys <- lapply(fs, value)
+
+ys <- unlist(ys)
+y <- sum(ys)
+y
+```
+
+Finally, we turned this into a utility function:
 
 ```{r}
 parallel_lapply <- function(X, FUN) {
@@ -134,8 +162,7 @@ parallel_lapply <- function(X, FUN) {
 }
 ```
 
-We can the use this to apply a function to each of the elements of a
-list in parallel, e.g.
+such that we can do:
 
 ```{r}
 library(future)
@@ -149,12 +176,43 @@ y
 ```
 
 
+### Parallel versions of purrr::map()
+
 **Task `{r} task()`:**
 
 Write a `parallel_map()` function that emulates what the `map()`
-function of the **purrr** package does, while at the same tme running
-in parallel using futures. I recommend that you modify the existing
-`parallel_lapply()`. Verify that it works with:
+function of the **[purrr]** package does, while at the same time running
+in parallel using futures. We want to create a parallel version of:
+
+```{r}
+library(purrr)
+xs <- list(1:25, 26:50, 51:75, 76:100)
+ys <- map(xs, slow_sum)
+ys <- unlist(ys)
+y <- sum(ys)
+y
+```
+
+We want to use the same argument names as
+[`map()`](https://purrr.tidyverse.org/reference/map.html);
+
+```{r}
+args(map)
+```
+
+so that users of our `parallel_map()` will feel at home. For
+simplicity, you can ignore arguments `...` and `.progress`. So, let's
+create a function:
+
+```{r}
+#| eval: false
+parallel_map <- function(.x, .f) {
+  ## something here
+}
+```
+
+I recommend that you modify the existing `parallel_lapply()`. Verify
+that it works with:
 
 ```{r}
 #| eval: false
@@ -174,9 +232,9 @@ y
 ```{r}
 library(purrr)
 
-parallel_map <- function(X, FUN) {
-  fs <- map(X, function(x) {
-    future(FUN(x))
+parallel_map <- function(.x, .f) {
+  fs <- map(.x, function(x) {
+    future(.f(x))
   })
   map(fs, value)
 }
@@ -235,9 +293,9 @@ think carefully where in your function you want to use `map_dbl()`._
 ```{r}
 library(purrr)
 
-parallel_map_dbl <- function(X, FUN) {
-  fs <- map(X, function(x) {
-    future(FUN(x))
+parallel_map_dbl <- function(.x, .f) {
+  fs <- map(.x, function(x) {
+    future(.f(x))
   })
   map_dbl(fs, value)
 }
@@ -257,9 +315,9 @@ following alternative solutions work equally well:
 <details>
 <summary>Solution 1</summary>
 ```{r}
-parallel_map_dbl <- function(X, FUN) {
-  fs <- purrr::map(X, function(x) {
-    future(FUN(x))
+parallel_map_dbl <- function(.x, .f) {
+  fs <- purrr::map(.x, function(x) {
+    future(.f(x))
   })
   purrr::map_dbl(fs, value)
 }
@@ -269,9 +327,9 @@ parallel_map_dbl <- function(X, FUN) {
 <details>
 <summary>Solution 2</summary>
 ```{r}
-parallel_map_dbl <- function(X, FUN) {
-  fs <- lapply(X, function(x) {
-    future(FUN(x))
+parallel_map_dbl <- function(.x, .f) {
+  fs <- lapply(.x, function(x) {
+    future(.f(x))
   })
   purrr::map_dbl(fs, value)
 }
@@ -281,11 +339,11 @@ parallel_map_dbl <- function(X, FUN) {
 <details>
 <summary>Solution 3</summary>
 ```{r}
-parallel_map_dbl <- function(X, FUN) {
+parallel_map_dbl <- function(.x, .f) {
   fs <- list()
   for (ii in seq_along(X)) {
-    x <- X[[ii]]
-    fs[[ii]] <- future(FUN(x))
+    x <- .x[[ii]]
+    fs[[ii]] <- future(.f(x))
   }
   purrr::map_dbl(fs, value)
 }
@@ -307,6 +365,8 @@ y <- log(x)
 we get an error.
 
 
+<!--
+
 **Task `{r} task()`:**
 
 Try the same using the future assignment operator `%<-%`;
@@ -317,13 +377,14 @@ y %<-% log(x)
 y
 ```
 
-_Do you get an error?_  Notice how similar it works to `<-`.
+_Do you get an error?  How did it differ from `<-`?_
+
+-->
 
 
 **Task `{r} task()`:**
 
-Try the same, but now split up the `%<-%` into a `future()` and a
-`value()` call. Start by calling:
+Try the with a `future()` call and a `value()` call. Start by calling:
 
 ```{r, error = TRUE}
 #| eval: false
@@ -363,12 +424,12 @@ _What happens now?_  What if you keep calling `value(f)` over and over?
 
 **Task `{r} task()`:**
 
-If we **purrr** as in:
+If we use **purrr** as in:
 
 ```{r, error = TRUE}
 library(purrr)
 
-xs <- list(42, "1.2", 3.14)
+xs <- list("1.2", 42, 3.14)
 y <- map_dbl(xs, log)
 ```
 
@@ -376,15 +437,15 @@ we get an error, because the second element of the `xs` list holds a
 string instead of a numeric value.  That is what the error message
 tries to explain to us.
 
-Let's try with our `parallel_map_dbl()` function from above.
+Let's try with **[furrr]** and `future_map_dbl()` function from above.
 
 ```{r, error = TRUE}
 #| eval: false
-library(future)
+library(furrr)
 plan(multisession, workers = 4)
 
-xs <- list(42, "1.2", 3.14)
-y <- parallel_map_dbl(xs, log)
+xs <- list("1.2", 42, 3.14)
+y <- future_map_dbl(xs, log)
 ```
 
 _Does it behave as you expected? Do you notice anything different? If
@@ -400,7 +461,10 @@ sequential code. But rest assured, Futureverse is the only parallel
 framework that behave this way. If you use one of the traditional
 frameworks you will get a different type of error, or not an error at
 all. This is the case for `parLapply()` and `mclapply()` of
-**parallel** as well as for `foreach()` and `%dopar%` of **foreach**.
+**parallel**.
+<!--
+as well as for `foreach()` and `%dopar%` of **foreach**.
+-->
 
 :::
 
@@ -463,12 +527,12 @@ futures.
 
 ```{r}
 #| eval: false
-library(future)
+library(furrr)
 plan(multisession, workers = 4)
 
 xs <- list(42, -1.2, 3.14)
-y <- parallel_map_dbl(xs, log)
-y
+ys <- future_map(xs, log)
+ys
 ```
 
 _Did you get a warning?_
@@ -482,8 +546,8 @@ Try the same with `mclapply()`;
 #| eval: false
 library(parallel)
 xs <- list(42, -1.2, 3.14)
-y <- mclapply(xs, log)
-y
+ys <- mclapply(xs, log)
+ys
 ```
 
 _Did you get a warning?_
@@ -496,14 +560,25 @@ Then, try with `parLapply()`;
 library(parallel)
 workers <- makeCluster(4)
 xs <- list(42, -1.2, 3.14)
-y <- parLapply(xs, log, cl = workers)
-y
+ys <- parLapply(xs, log, cl = workers)
+ys
 stopCluster(workers)
 ```
 
 _Did you get a warning?_
 
 
+::: {.callout-note}
+
+Futureverse is the only parallel framework that relays errors,
+warnings, messages, and output from parallel workers wherever they run
+in the world back to your R console.
+
+:::
+
+
 
 [Futureverse]: https://www.futureverse.org/
 [future]: https://future.futureverse.org/
+[purrr]: https://purrr.tidyverse.org/
+[furrr]: https://furrr.futureverse.org/
