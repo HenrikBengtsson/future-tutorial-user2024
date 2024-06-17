@@ -15,8 +15,6 @@ task <- function() {
 ```
 
 ```{r, echo = FALSE}
-slow_sum <- base::sum
-
 ## Allow workers = 4, even if we only have access to two cores
 options(parallelly.maxWorkers.localhost = c(Inf, Inf))
 ```
@@ -27,8 +25,8 @@ This is the second of two parallelization labs. It will take you
 through **[Futureverse]** functions that you and others are likely to
 use to parallelize R code.  We will cover the **future.apply**
 package, **furrr** package, and **foreach** with the **doFuture**
-package. In your R career, you pick whichever you prefer - they are
-all equally good.
+package. _In your R career, you can pick whichever you prefer - they
+are all equally good._
 
 You are highly encouraged to test things out yourself and tweak things
 to figure out how these methods behave.
@@ -48,6 +46,27 @@ packages in Lab 1. If not, install them now as:
 ```{r}
 #| eval: false
 install.packages("futureverse")
+```
+
+We will also use a less-slow version of `slow_sum()`;
+
+```{r}
+library(future)
+library(progressr)
+
+slow_sum <- function(x) {
+  sum <- 0
+  for (value in x) {
+    Sys.sleep(0.1)     ## 0.1 second slowdown per value
+    sum <- sum + value
+  }
+  sum
+}
+```
+
+
+```{r, echo = FALSE}
+slow_sum <- base::sum
 ```
 
 
@@ -227,6 +246,7 @@ y
 ```
 
 
+<!--
 <details>
 <summary>Solution</summary>
 ```{r}
@@ -240,6 +260,7 @@ parallel_map <- function(.x, .f) {
 }
 ```
 </details>
+-->
 
 ```{r, echo=FALSE}
 xs <- list(1:25, 26:50, 51:75, 76:100)
@@ -288,6 +309,7 @@ y
 _Hint: Don't use `unlist()` - instead make use of `map_dbl()`. But
 think carefully where in your function you want to use `map_dbl()`._
 
+<!--
 <details>
 <summary>Solution</summary>
 ```{r}
@@ -301,8 +323,9 @@ parallel_map_dbl <- function(.x, .f) {
 }
 ```
 </details>
+-->
 
-
+<!--
 By now, you probably have one `map()` and one `map_dbl()` inside your
 function. It is helpful to point out that it is the `map_dbl()` one
 that makes `parallel_map_dbl()` emulate what `purrr::map_dbl()` does.
@@ -349,7 +372,7 @@ parallel_map_dbl <- function(.x, .f) {
 }
 ```
 </details>
-
+-->
 
 
 ### Things that are problematic
@@ -597,8 +620,155 @@ in the world back to your R console.
 :::
 
 
+### Progress updates
+
+You can generate progress updates using the **[progressr]** package.
+
+**Task `{r} task()`:**
+
+Create the following:
+
+```{r}
+library(progressr)
+
+slow_sum <- function(x) {
+  p <- progressor(along = x)  ## create progressor of length(x)
+  
+  sum <- 0
+  for (value in x) {
+    p()                       ## signal progress
+    Sys.sleep(1.0)
+    sum <- sum + value
+  }
+  
+  sum
+}
+```
+
+Then call:
+
+```{r}
+#| eval: false
+y <- slow_sum(1:5)
+```
+
+_What happened?_
+
+
+**Task `{r} task()`:**
+
+Nothing happened, because we never told **progressr** we, as
+end-users, are interested in the progress updates.  To do that, we
+need to "subscribe" to the progress events, which we can do by
+calling:
+
+```{r}
+#| eval: false
+progressr::handlers(global = TRUE)
+```
+
+once at the top of our R script.
+
+After this, retry with:
+
+```{r}
+#| eval: false
+y <- slow_sum(1:5)
+```
+
+
+**Task `{r} task()`:**
+
+The default progress report uses an old-fashioned progress bar that is
+built-in to R. We could tweak it to be a little bit more colorful:
+
+```{r}
+#| eval: false
+progressr::handlers(
+  progressr::handler_txtprogressbar(char = cli::col_red(cli::symbol$heart))
+)
+```
+
+and call
+
+```{r}
+#| eval: false
+y <- slow_sum(1:5)
+```
+
+
+**Task `{r} task()`:**
+
+There are other ways to report on progress too. The **[cli]** package
+generates colorful, nice looking progress bars in the terminal.  Try
+with:
+
+```{r}
+#| eval: false
+progressr::handlers("cli")
+```
+
+
+**Task `{r} task()`:**
+
+Let's try to re-customize the default **cli** progress bar, e.g.
+
+```{r}
+progressr::handlers(
+  progressr::handler_cli(format = "{cli::pb_spin} {cli::pb_bar} {cli::pb_current}/{cli::pb_total} {cli::pb_status}")
+)
+```
+
+and call
+
+```{r}
+#| eval: false
+y <- slow_sum(1:5)
+```
+
+
+**Task `{r} task()`:**
+
+Thus far we have done progress reporting when running sequentially,
+but **progressr** works also when running in parallel using
+Futureverse.
+
+Let's start by creating a utility function:
+
+```{r}
+slow_sum_all <- function(xs) {
+  p <- progressr::progressor(along = xs)
+  y <- furrr::future_map_dbl(xs, function(x) {
+    sum <- slow_sum(x)
+    p()
+    sum
+  })
+  sum(y)
+}
+```
+
+that we can use as:
+
+```{r}
+#| eval: false
+xs <- list(1:10, 11:40, 41:60, 61:100)
+y <- slow_sum_all(xs)
+y
+```
+
+_Now, run it in parallel with two parallel workers. Pay attention to
+processing time and progress bar._
+
+
+**Task `{r} task()`:**
+
+_Retry with four parallel workers. Then go back to sequential
+processing._
+
 
 [Futureverse]: https://www.futureverse.org/
 [future]: https://future.futureverse.org/
+[progressr]: https://progressr.tidyverse.org/
 [purrr]: https://purrr.tidyverse.org/
 [furrr]: https://furrr.futureverse.org/
+[cli]: https://cli.r-lib.org/
