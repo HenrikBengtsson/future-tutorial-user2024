@@ -476,7 +476,7 @@ xs <- list("1.2", 42, 3.14)
 y <- map_dbl(xs, log)
 ```
 
-we get an error, because the second element of the `xs` list holds a
+we get an error, because the first element of the `xs` list holds a
 string instead of a numeric value.  That is what the error message
 tries to explain to us.
 
