@@ -679,8 +679,11 @@ y <- slow_sum(1:5)
 
 **Task `{r} task()`:**
 
-The default progress report uses an old-fashioned progress bar that is
-built-in to R. We could tweak it to be a little bit more colorful:
+If you run R from RStudio, the default progress bar is reported using
+the built-in RStudio progress bar.  If you run R from the terminal or
+in VSCode, the default progress report uses an old-fashioned progress
+bar that is built-in to R.  We could tweak it to be a little bit more
+colorful:
 
 ```{r}
 #| eval: false
