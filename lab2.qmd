@@ -246,7 +246,6 @@ y
 ```
 
 
-<!--
 <details>
 <summary>Solution</summary>
 ```{r}
@@ -260,7 +259,7 @@ parallel_map <- function(.x, .f) {
 }
 ```
 </details>
--->
+
 
 ```{r, echo=FALSE}
 xs <- list(1:25, 26:50, 51:75, 76:100)
@@ -309,7 +308,6 @@ y
 _Hint: Don't use `unlist()` - instead make use of `map_dbl()`. But
 think carefully where in your function you want to use `map_dbl()`._
 
-<!--
 <details>
 <summary>Solution</summary>
 ```{r}
@@ -323,9 +321,8 @@ parallel_map_dbl <- function(.x, .f) {
 }
 ```
 </details>
--->
 
-<!--
+
 By now, you probably have one `map()` and one `map_dbl()` inside your
 function. It is helpful to point out that it is the `map_dbl()` one
 that makes `parallel_map_dbl()` emulate what `purrr::map_dbl()` does.
@@ -372,7 +369,7 @@ parallel_map_dbl <- function(.x, .f) {
 }
 ```
 </details>
--->
+
 
 
 ### Things that are problematic
