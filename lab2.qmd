@@ -31,24 +31,15 @@ are all equally good._
 You are highly encouraged to test things out yourself and tweak things
 to figure out how these methods behave.
 
-Slides: ['Futureverse: A Unifying Parallelization Framework in R for
-Everyone - Part 2'](BengtssonH_20240612-futureverse-part2-raukR_2024.pdf)
-
 :::
 
 
 
-## Install
+## Setup
 
 It is assumed that you have already installed common Futureverse
-packages in Lab 1. If not, install them now as:
-
-```{r}
-#| eval: false
-install.packages("futureverse")
-```
-
-We will also use a less-slow version of `slow_sum()`;
+packages in Lab 1.  In this second part, we will use a
+not-so-slow-but-still-slow version of `slow_sum()`;
 
 ```{r}
 library(future)

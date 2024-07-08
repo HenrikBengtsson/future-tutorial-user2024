@@ -3,19 +3,19 @@ project:
   output-dir: docs
   
 website:
-  title: "Futurverse - RaukR 2024"
+  title: "Futurverse - UseR! 2024"
   navbar:
     left:
-      - text: "Part 1 (2024-06-12)"
+      - text: "Part 1"
         menu:
           - text: "Slides Part 1 (pdf)"
-            url:  BengtssonH_20240612-futureverse-part1-raukR_2024.pdf
+            url:  BengtssonH_20240612-futureverse-part1-user2024.pdf
           - text: "Lab 1"
             href: lab1.qmd
-      - text: "Part 2 (2024-06-17)"
+      - text: "Part 2"
         menu:
           - text: "Slides Part 2 (pdf)"
-            url:  BengtssonH_20240612-futureverse-part2-raukR_2024.pdf
+            url:  BengtssonH_20240612-futureverse-part2-user2024.pdf
           - text: "Lab 2"
             href: lab2.qmd
         
