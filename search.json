@@ -4,7 +4,7 @@
     "href": "lab1.html",
     "title": "Lab: Futureverse 1",
     "section": "",
-    "text": "Note\n\n\n\nThis is the first of two parallelization labs. It will take you through some basic steps to parallelize your code using Futureverse. It focuses on core functions future() and value() for the purpose of illustrating what happens behind the scenes when we parallelize R code.\nYou are highly encouraged to test things out yourself and tweak things to figure out how these methods behave.\nSlides: You’ll find the slides in the menus above."
+    "text": "Note\n\n\n\nuseR 2024 Slack: https://join.slack.com/t/whyr/shared_invite/zt-2m9zdoj4z-zw7kOBmJ6P4xpqTk7GkGeA"
   },
   {
     "objectID": "lab1.html#install",

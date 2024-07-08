@@ -9,7 +9,7 @@
 <meta name="author" content="Henrik Bengtsson">
 <meta name="description" content="Speed up your code through parallel computing">
 
-<title>Futurverse - UseR! 2024 - Lab: Futureverse 2</title>
+<title>Futurverse - RaukR 2024 - Lab: Futureverse 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -114,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Futurverse - UseR! 2024</span>
+    <span class="navbar-title">Futurverse - RaukR 2024</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -124,13 +124,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Part 1</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-1-(2024-06-12" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Part 1 (2024-06-12)</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-1">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-1-(2024-06-12">    
         <li>
-    <a class="dropdown-item" href="https://docs.google.com/presentation/d/1O_0FHwj1kB6JXK4Z1n8-H5h00GS8nzs4P7KY6Bknais/edit?usp=sharing">
- <span class="dropdown-text">Slides Part 1 (online)</span></a>
+    <a class="dropdown-item" href="./BengtssonH_20240612-futureverse-part1-raukR_2024.pdf">
+ <span class="dropdown-text">Slides Part 1 (pdf)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./lab1.html">
@@ -139,18 +139,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Part 2</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-2-(2024-06-17" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Part 2 (2024-06-17)</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-2">    
-        <li>
-    <a class="dropdown-item" href="https://docs.google.com/presentation/d/1DNtO52spuqElppac4OL7Ov8jUTzD_vrlD1dXtQ7sUmY/edit?usp=sharing">
- <span class="dropdown-text">Slides Part 2 (online)</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./lab2.html">
- <span class="dropdown-text">Lab 2</span></a>
-  </li>  
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-2-(2024-06-17">    
+        <li class="dropdown-header">Slides Part 2 (pdf)</li>
+        <li class="dropdown-header">Lab 2</li>
     </ul>
   </li>
 </ul>
@@ -169,15 +163,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#install" id="toc-install" class="nav-link active" data-scroll-target="#install">Install</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a>
   <ul class="collapse">
   <li><a href="#recap-from-lab-1" id="toc-recap-from-lab-1" class="nav-link" data-scroll-target="#recap-from-lab-1">Recap from Lab 1</a></li>
   <li><a href="#parallel-versions-of-purrrmap" id="toc-parallel-versions-of-purrrmap" class="nav-link" data-scroll-target="#parallel-versions-of-purrrmap">Parallel versions of purrr::map()</a></li>
-  <li><a href="#things-that-are-problematic" id="toc-things-that-are-problematic" class="nav-link" data-scroll-target="#things-that-are-problematic">Things that are problematic</a></li>
   <li><a href="#errors-and-parallel-processing" id="toc-errors-and-parallel-processing" class="nav-link" data-scroll-target="#errors-and-parallel-processing">Errors and parallel processing</a></li>
   <li><a href="#warnings-and-parallel-processing" id="toc-warnings-and-parallel-processing" class="nav-link" data-scroll-target="#warnings-and-parallel-processing">Warnings and parallel processing</a></li>
-  <li><a href="#progress-updates" id="toc-progress-updates" class="nav-link" data-scroll-target="#progress-updates">Progress updates</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -225,26 +217,16 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This is the second of two parallelization labs. It will take you through <strong><a href="https://www.futureverse.org/">Futureverse</a></strong> functions that you and others are likely to use to parallelize R code. We will cover the <strong>future.apply</strong> package, <strong>furrr</strong> package, and <strong>foreach</strong> with the <strong>doFuture</strong> package. <em>In your R career, you can pick whichever you prefer - they are all equally good.</em></p>
+<p>This is the second of two parallelization labs. It will take you through <strong><a href="https://www.futureverse.org/">Futureverse</a></strong> functions that you and others are likely to use to parallelize R code. We will cover the <strong>future.apply</strong> package, <strong>furrr</strong> package, and <strong>foreach</strong> with the <strong>DoFuture</strong> package. In your R career, you pick whichever you prefer - they are all equally good.</p>
 <p>You are highly encouraged to test things out yourself and tweak things to figure out how these methods behave.</p>
-<p>Slides: <em>You’ll find the slides in the menus above.</em></p>
+<p>Slides: <a href="BengtssonH_20240612-futureverse-part2-raukR_2024.pdf">‘Futureverse: A Unifying Parallelization Framework in R for Everyone - Part 2’</a></p>
 </div>
 </div>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>It is assumed that you have already installed common Futureverse packages in Lab 1. In this second part, we will use a not-so-slow-but-still-slow version of <code>slow_sum()</code>;</p>
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
+<p>It is assumed that you have already installed common Futureverse packages in Lab 1. If not, install them now as:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(progressr)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>slow_sum <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  sum <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (value <span class="cf">in</span> x) {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Sys.sleep</span>(<span class="fl">0.1</span>)     <span class="do">## 0.1 second slowdown per value</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    sum <span class="ot">&lt;-</span> sum <span class="sc">+</span> value</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  sum</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"futureverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exercises" class="level2">
@@ -374,7 +356,7 @@ Note
 <section id="parallel-versions-of-purrrmap" class="level3">
 <h3 class="anchored" data-anchor-id="parallel-versions-of-purrrmap">Parallel versions of purrr::map()</h3>
 <p><strong>Task 1:</strong></p>
-<p>Write a <code>parallel_map()</code> function that emulates what the <code>map()</code> function of the <strong><a href="https://purrr.tidyverse.org/">purrr</a></strong> package does, while at the same time running in parallel using futures. We want to create a parallel version of:</p>
+<p>Write a <code>parallel_map()</code> function that emulates what the <code>map()</code> function of the <strong>purrr</strong> package does, while at the same time running in parallel using futures. We want to create a parallel version of:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">26</span><span class="sc">:</span><span class="dv">50</span>, <span class="dv">51</span><span class="sc">:</span><span class="dv">75</span>, <span class="dv">76</span><span class="sc">:</span><span class="dv">100</span>)</span>
@@ -513,100 +495,67 @@ Solution 3
 </div>
 </details>
 </section>
-<section id="things-that-are-problematic" class="level3">
-<h3 class="anchored" data-anchor-id="things-that-are-problematic">Things that are problematic</h3>
-<p><strong>Task 3:</strong></p>
-<p>Run the following:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>, <span class="dv">26</span><span class="sc">:</span><span class="dv">50</span>, <span class="dv">51</span><span class="sc">:</span><span class="dv">75</span>, <span class="dv">76</span><span class="sc">:</span><span class="dv">100</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">seq_along</span>(xs), <span class="cf">function</span>(ii) {</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  ys[[ii]] <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(xs[[ii]])</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>ys</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>Why doesn’t it work?</em></p>
-<p><strong>Task 4:</strong></p>
-<p><em>Do you think the following can be parallelized?</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(xs)) {</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> xs[[ii]]</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> ys[[ii <span class="sc">-</span> <span class="dv">1</span>]]</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  ys[[ii]] <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(x <span class="sc">+</span> y)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<hr>
-<div class="callout callout-style-default callout-tip callout-titled" title="Pause here!">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Pause here!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Let’s pause here! Please let the tutor know when you got here.</p>
-</div>
-</div>
-<hr>
-</section>
 <section id="errors-and-parallel-processing" class="level3">
 <h3 class="anchored" data-anchor-id="errors-and-parallel-processing">Errors and parallel processing</h3>
 <p>The Futureverse has been designed such that your experience running parallel code will be as close as possible to when you run regular, sequential code. For example, if we call:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="st">"1.2"</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="st">"1.2"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in log(x): non-numeric argument to mathematical function</code></pre>
 </div>
 </div>
 <p>we get an error.</p>
-<p><strong>Task 5:</strong></p>
-<p>Try the with a <code>future()</code> call and a <code>value()</code> call. Start by calling:</p>
+<p><strong>Task 3:</strong></p>
+<p>Try the same using the future assignment operator <code>%&lt;-%</code>;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">log</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>y <span class="sc">%&lt;-%</span> <span class="fu">log</span>(x)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Do you get an error? How did it differ from <code>&lt;-</code>?</em></p>
+<p><strong>Task 4:</strong></p>
+<p>Try the same, but now split up the <code>%&lt;-%</code> into a <code>future()</code> and a <code>value()</code> call. Start by calling:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">log</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Did you get an error or not? What could be the reason for that?</em></p>
 <!-- We will not get an error until we collect the results, which only
 happens when we try to get the value of `f`. -->
 <p>Next, ask for the value of the future;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>What happens?</em></p>
 <!-- Here we are requesting the value of `f`, which will trigger the
 error to be signalled. -->
-<p><strong>Task 6:</strong></p>
+<p><strong>Task 5:</strong></p>
 <p>Ask for the value one more time;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>What happens now?</em> What if you keep calling <code>value(f)</code> over and over?</p>
-<p><strong>Task 7:</strong></p>
+<p><strong>Task 6:</strong></p>
 <p>If we use <strong>purrr</strong> as in:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>, <span class="fl">3.14</span>)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(xs, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="st">"1.2"</span>, <span class="fl">3.14</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">map_dbl</span>(xs, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `map_dbl()`:
-ℹ In index: 1.
+ℹ In index: 2.
 Caused by error:
 ! non-numeric argument to mathematical function</code></pre>
 </div>
 </div>
-<p>we get an error, because the first element of the <code>xs</code> list holds a string instead of a numeric value. That is what the error message tries to explain to us.</p>
-<p>Let’s try with <strong><a href="https://furrr.futureverse.org/">furrr</a></strong> and <code>future_map_dbl()</code> function from above.</p>
+<p>we get an error, because the second element of the <code>xs</code> list holds a string instead of a numeric value. That is what the error message tries to explain to us.</p>
+<p>Let’s try with our <code>parallel_map_dbl()</code> function from above.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>, <span class="fl">3.14</span>)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">future_map_dbl</span>(xs, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="st">"1.2"</span>, <span class="fl">3.14</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">parallel_map_dbl</span>(xs, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Does it behave as you expected? Do you notice anything different? If so, let’s talk about it.</em></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -619,182 +568,65 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>At first, it might appear obvious that we should get an error in these cases and that it will look the same as when running regular sequential code. But rest assured, Futureverse is the only parallel framework that behave this way. If you use one of the traditional frameworks you will get a different type of error, or not an error at all. This is the case for <code>parLapply()</code> and <code>mclapply()</code> of <strong>parallel</strong>. <!--
-as well as for `foreach()` and `%dopar%` of **foreach**.
---></p>
+<p>At first, it might appear obvious that we should get an error in these cases and that it will look the same as when running regular sequential code. But rest assured, Futureverse is the only parallel framework that behave this way. If you use one of the traditional frameworks you will get a different type of error, or not an error at all. This is the case for <code>parLapply()</code> and <code>mclapply()</code> of <strong>parallel</strong> as well as for <code>foreach()</code> and <code>%dopar%</code> of <strong>foreach</strong>.</p>
 </div>
 </div>
-<p><strong>Task 8:</strong></p>
+<p><strong>Task 7:</strong></p>
 <p>Next, try the same but with <code>mclapply()</code> of the <strong>parallel</strong> package;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(xs, log)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(xs, log)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>What happened - did you get an error? With the behavior you observed, would you be able figure out what is wrong? Also, what is the risk with the current behavior?</em></p>
-<p><strong>Task 9:</strong></p>
+<p><strong>Task 8:</strong></p>
 <p>Next, try the same but with <code>parLapply()</code> of the <strong>parallel</strong> package;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>workers <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">parLapply</span>(xs, log, <span class="at">cl =</span> workers)</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(workers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>workers <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">parLapply</span>(xs, log, <span class="at">cl =</span> workers)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(workers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>What happened - did you get an error? With the behavior you observed, would you be able figure out what is wrong?</em></p>
 </section>
 <section id="warnings-and-parallel-processing" class="level3">
 <h3 class="anchored" data-anchor-id="warnings-and-parallel-processing">Warnings and parallel processing</h3>
 <p>Just like errors, warnings are signalled as-is when parallelizing via futures.</p>
-<p><strong>Task 10:</strong></p>
+<p><strong>Task 9:</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furrr)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">future_map</span>(xs, log)</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>ys</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">parallel_map_dbl</span>(xs, log)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Did you get a warning?</em></p>
-<p><strong>Task 11:</strong></p>
+<p><strong>Task 10:</strong></p>
 <p>Try the same with <code>mclapply()</code>;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(xs, log)</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>ys</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(xs, log)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Did you get a warning?</em></p>
 <p>Then, try with <code>parLapply()</code>;</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>workers <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">parLapply</span>(xs, log, <span class="at">cl =</span> workers)</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>ys</span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(workers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>workers <span class="ot">&lt;-</span> <span class="fu">makeCluster</span>(<span class="dv">4</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">42</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">3.14</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">parLapply</span>(xs, log, <span class="at">cl =</span> workers)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>y</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">stopCluster</span>(workers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Did you get a warning?</em></p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Futureverse is the only parallel framework that relays errors, warnings, messages, and output from parallel workers wherever they run in the world back to your R console.</p>
-</div>
-</div>
-<hr>
-<div class="callout callout-style-default callout-tip callout-titled" title="Pause here!">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Pause here!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Let’s pause here! Please let the tutor know when you got here.</p>
-</div>
-</div>
-<hr>
-</section>
-<section id="progress-updates" class="level3">
-<h3 class="anchored" data-anchor-id="progress-updates">Progress updates</h3>
-<p>You can generate progress updates using the <strong><a href="https://progressr.tidyverse.org/">progressr</a></strong> package.</p>
-<p><strong>Task 12:</strong></p>
-<p>Create the following:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(progressr)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>slow_sum <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">progressor</span>(<span class="at">along =</span> x)  <span class="do">## create progressor of length(x)</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  sum <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (value <span class="cf">in</span> x) {</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span>()                       <span class="do">## signal progress</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Sys.sleep</span>(<span class="fl">1.0</span>)</span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    sum <span class="ot">&lt;-</span> sum <span class="sc">+</span> value</span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  sum</span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Then call:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>What happened?</em></p>
-<p><strong>Task 13:</strong></p>
-<p>Nothing happened, because we never told <strong>progressr</strong> we, as end-users, are interested in the progress updates. To do that, we need to “subscribe” to the progress events, which we can do by calling:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>progressr<span class="sc">::</span><span class="fu">handlers</span>(<span class="at">global =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>once at the top of our R script.</p>
-<p>After this, retry with:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Task 14:</strong></p>
-<p>If you run R from RStudio, the default progress bar is reported using the built-in RStudio progress bar. If you run R from the terminal or in VSCode, the default progress report uses an old-fashioned progress bar that is built-in to R. We could tweak it to be a little bit more colorful:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>progressr<span class="sc">::</span><span class="fu">handlers</span>(</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  progressr<span class="sc">::</span><span class="fu">handler_txtprogressbar</span>(<span class="at">char =</span> cli<span class="sc">::</span><span class="fu">col_red</span>(cli<span class="sc">::</span>symbol<span class="sc">$</span>heart))</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>and call</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Task 15:</strong></p>
-<p>There are other ways to report on progress too. The <strong><a href="https://cli.r-lib.org/">cli</a></strong> package generates colorful, nice looking progress bars in the terminal. Try with:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>progressr<span class="sc">::</span><span class="fu">handlers</span>(<span class="st">"cli"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Task 16:</strong></p>
-<p>Let’s try to re-customize the default <strong>cli</strong> progress bar, e.g.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>progressr<span class="sc">::</span><span class="fu">handlers</span>(</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  progressr<span class="sc">::</span><span class="fu">handler_cli</span>(<span class="at">format =</span> <span class="st">"{cli::pb_spin} {cli::pb_bar} {cli::pb_current}/{cli::pb_total} {cli::pb_status}"</span>)</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>and call</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Task 17:</strong></p>
-<p>Thus far we have done progress reporting when running sequentially, but <strong>progressr</strong> works also when running in parallel using Futureverse.</p>
-<p>Let’s start by creating a utility function:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>slow_sum_all <span class="ot">&lt;-</span> <span class="cf">function</span>(xs) {</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> progressr<span class="sc">::</span><span class="fu">progressor</span>(<span class="at">along =</span> xs)</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> furrr<span class="sc">::</span><span class="fu">future_map_dbl</span>(xs, <span class="cf">function</span>(x) {</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    sum <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(x)</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">p</span>()</span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    sum</span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(y)</span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>that we can use as:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">40</span>, <span class="dv">41</span><span class="sc">:</span><span class="dv">60</span>, <span class="dv">61</span><span class="sc">:</span><span class="dv">100</span>)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">slow_sum_all</span>(xs)</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>Now, run it in parallel with two parallel workers. Pay attention to processing time and progress bar.</em></p>
-<p><strong>Task 18:</strong></p>
-<p><em>Retry with four parallel workers. Then go back to sequential processing.</em></p>
 
 
 </section>
@@ -882,7 +714,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/HenrikBengtsson\.github\.io\/future-tutorial-user2024\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
