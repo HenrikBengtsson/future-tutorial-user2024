@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.53">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Henrik Bengtsson">
 <meta name="description" content="Speed up your code through parallel computing">
 
-<title>Futurverse - RaukR 2024 - Lab: Futureverse 1</title>
+<title>Lab: Futureverse 1 – Futurverse - UseR! 2024</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -102,7 +102,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -143,23 +143,23 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Futurverse - RaukR 2024</span>
+    <span class="navbar-title">Futurverse - UseR! 2024</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-1-(2024-06-12" role="button" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Part 1 (2024-06-12)</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Part 1</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-1-(2024-06-12">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-1">    
         <li>
-    <a class="dropdown-item" href="https://docs.google.com/presentation/d/e/2PACX-1vRD2i8CC0faaQkeWZJMrWdOLYV7H5ibp6yN7mVHXbLl_paJYb7-Gs62owgoowKm6ywCvgCSIVn-ycPV/pub?start=false&amp;loop=false&amp;delayms=60000#slide=id.ga27fac03c6_0_0">
- <span class="dropdown-text">Slides Part 1</span></a>
+    <a class="dropdown-item" href="./BengtssonH_20240612-futureverse-part1-user2024.pdf">
+ <span class="dropdown-text">Slides Part 1 (pdf)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./lab1.html">
@@ -167,9 +167,24 @@ window.Quarto = {
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-part-2" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Part 2</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-part-2">    
+        <li>
+    <a class="dropdown-item" href="./BengtssonH_20240612-futureverse-part2-user2024.pdf">
+ <span class="dropdown-text">Slides Part 2 (pdf)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./lab2.html">
+ <span class="dropdown-text">Lab 2</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -189,8 +204,6 @@ window.Quarto = {
   <li><a href="#simple-parallel-tasks" id="toc-simple-parallel-tasks" class="nav-link" data-scroll-target="#simple-parallel-tasks">Simple parallel tasks</a></li>
   <li><a href="#create-many-parallel-tasks-via-a-for-loop" id="toc-create-many-parallel-tasks-via-a-for-loop" class="nav-link" data-scroll-target="#create-many-parallel-tasks-via-a-for-loop">Create many parallel tasks via a for loop</a></li>
   <li><a href="#our-own-parallel-lapply" id="toc-our-own-parallel-lapply" class="nav-link" data-scroll-target="#our-own-parallel-lapply">Our own parallel lapply</a></li>
-  <li><a href="#errors-and-parallel-processing" id="toc-errors-and-parallel-processing" class="nav-link" data-scroll-target="#errors-and-parallel-processing">Errors and parallel processing</a></li>
-  <li><a href="#warnings-and-parallel-processing" id="toc-warnings-and-parallel-processing" class="nav-link" data-scroll-target="#warnings-and-parallel-processing">Warnings and parallel processing</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -240,7 +253,7 @@ Note
 <div class="callout-body-container callout-body">
 <p>This is the first of two parallelization labs. It will take you through some basic steps to parallelize your code using <strong><a href="https://www.futureverse.org/">Futureverse</a></strong>. It focuses on core functions <code>future()</code> and <code>value()</code> for the purpose of illustrating what happens behind the scenes when we parallelize R code.</p>
 <p>You are highly encouraged to test things out yourself and tweak things to figure out how these methods behave.</p>
-<p>Slides: <a href="https://docs.google.com/presentation/d/e/2PACX-1vRD2i8CC0faaQkeWZJMrWdOLYV7H5ibp6yN7mVHXbLl_paJYb7-Gs62owgoowKm6ywCvgCSIVn-ycPV/pub?start=false&amp;loop=false&amp;delayms=60000#slide=id.ga27fac03c6_0_0">‘Futureverse: A Unifying Parallelization Framework in R for Everyone - Part 1’</a></p>
+<p>Slides: <a href="BengtssonH_20240612-futureverse-part1-raukR_2024.pdf">‘Futureverse: A Unifying Parallelization Framework in R for Everyone - Part 1’</a></p>
 </div>
 </div>
 <section id="install" class="level2">
@@ -451,88 +464,9 @@ toc()
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<!--
-parallel_lapply <- function(X, FUN) {
-  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
-  fs <- lapply(X, function(x) {
-    ## For element 'x', create future that calls FUN(x)
-    future(FUN(x))
-  })
-  
-  ## Collect the values from all futures
-  value(fs)
-}
--->
-</section>
-<section id="errors-and-parallel-processing" class="level3">
-<h3 class="anchored" data-anchor-id="errors-and-parallel-processing">Errors and parallel processing</h3>
-<p>The Futureverse has been designed such that your experience running parallel code will be as close as possible to when you run regular, sequential code. For example, if we call:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="st">"1.2"</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in log(x): non-numeric argument to mathematical function</code></pre>
-</div>
-</div>
-<p>we get an error.</p>
-<p><strong>Task 10:</strong></p>
-<p>If we try the same with a future, it’s natural to expect the same error;</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">log</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>Run the above. Did you get an error or not? What could be the reason for that?</em></p>
-<!-- We will not get an error until we collect the results, which only
-happens when we try to get the value of `f`. -->
-<p><em>If we try to get the value of <code>f</code> as in</em></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>what happens?</em></p>
-<!-- Here we are requesting the value of `f`, which will trigger the
-error to be signalled. -->
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>At first, it might appear obvious that we should get an error in these cases and that it will look the same as when running regular sequential code. But rest assured, Futureverse is the only parallel framework that behave this way. If you use one of the traditional frameworks you will get a different type of error, or not an error at all. This is the case for <code>parLapply()</code> and <code>mclapply()</code> of <strong>parallel</strong> as well as for <code>foreach()</code> and <code>%dopar%</code> of <strong>foreach</strong>.</p>
-</div>
-</div>
-<p><strong>Task 11:</strong></p>
-<p>Try with the following sequential code:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">lapply</span>(X, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>Did you get an error?</em></p>
-<p><strong>Task 12:</strong></p>
-<p>Next, try the same but with <code>mclapply()</code> of the <strong>parallel</strong> package;</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(X, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>What happened - did you get an error?</em></p>
-<p><em>What do you get if you look at <code>y</code>, e.g.&nbsp;<code>print(y)</code> or <code>str(y)</code>?</em></p>
-<p><strong>Task 13:</strong></p>
-<p>Finally, try the same but with your <code>parallel_lapply()</code> that uses Futureverse:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">"1.2"</span>, <span class="dv">42</span>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">parallel_lapply</span>(X, log)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Comment: Expand the following for a working version of <code>parallel_lapply()</code>.</p>
 <details>
 <summary>
-parallel_lapply()
+Solution
 </summary>
 <pre>parallel_lapply &lt;- function(X, FUN) {
   ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
@@ -546,33 +480,6 @@ parallel_lapply()
 }
 </pre>
 </details>
-<p><em>Did you get an error?</em></p>
-<p><strong>Task 14:</strong></p>
-<p>Let’s continue with our future-based example. What do you think the behavior is if we switch back to sequential processing using:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(sequential)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">log</span>(x))</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>? Try it. <em>What do you observe? Did you expect something different? Did the error happen already when calling <code>future()</code> or when calling <code>value()</code>?</em></p>
-<p>When done, make sure to switch back to parallel processing again:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="warnings-and-parallel-processing" class="level3">
-<h3 class="anchored" data-anchor-id="warnings-and-parallel-processing">Warnings and parallel processing</h3>
-<p>Just like errors, warnings are signalled as-is when parallelizing via futures.</p>
-<p><strong>Task 15:</strong></p>
-<p>Try the following:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="sc">-</span><span class="fl">0.5</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">log</span>(x))</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(f)</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><em>Did you get a warning? By the way, how do you think the parallel worker that runs in the background and evalutes <code>log(x)</code> knows what the value of <code>x</code> is?</em></p>
 
 
 </section>
@@ -614,18 +521,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -657,15 +553,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/now\.futureverse\.org");
+      var filterRegex = new RegExp("https:\/\/HenrikBengtsson\.github\.io\/future-tutorial-user2024\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
