@@ -31,6 +31,8 @@ are all equally good._
 You are highly encouraged to test things out yourself and tweak things
 to figure out how these methods behave.
 
+Slides: _You'll find the slides in the menus above._
+
 :::
 
 
@@ -398,6 +400,17 @@ for (ii in 2:length(xs)) {
 ```
 
 
+---
+
+::: {.callout-tip title="Pause here!"}
+
+Let's pause here! Please let the tutor know when you got here.
+
+:::
+
+---
+
+
 ### Errors and parallel processing
 
 The Futureverse has been designed such that your experience running
@@ -606,6 +619,17 @@ warnings, messages, and output from parallel workers wherever they run
 in the world back to your R console.
 
 :::
+
+
+---
+
+::: {.callout-tip title="Pause here!"}
+
+Let's pause here! Please let the tutor know when you got here.
+
+:::
+
+---
 
 
 ### Progress updates

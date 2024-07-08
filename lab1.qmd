@@ -25,7 +25,7 @@ scenes when we parallelize R code.
 You are highly encouraged to test things out yourself and tweak things
 to figure out how these methods behave.
 
-Slides: ['Futureverse: A Unifying Parallelization Framework in R for Everyone - Part 1'](BengtssonH_20240612-futureverse-part1-raukR_2024.pdf)
+Slides: _You'll find the slides in the menus above._
 
 :::
 
