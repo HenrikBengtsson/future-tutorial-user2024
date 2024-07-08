@@ -390,8 +390,7 @@ _Do you think the following can be parallelized?_
 
 ```{r}
 #| eval: false
-ys <- list()
-y <- 0
+ys <- list(0)  # initialize with zero
 for (ii in 2:length(xs)) {
   x <- xs[[ii]]
   y <- ys[[ii - 1]]
