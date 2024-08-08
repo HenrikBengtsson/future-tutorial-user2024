@@ -1,5 +1,4 @@
-# Futureverse - raukR 2024
+# Futureverse - useR 2024
 
-Material for the Futureverse lectures and labs at [RaukR
-2024](https://nbisweden.github.io/raukr-2024/), Visby, Sweden. Total
-time: 2 * 3 hours = 6 hours.
+Material for the Futureverse tutorial at [useR! 2024](https://user2024.r-project.org/), Salzburg, Austria. Total
+time: 3 hours.
