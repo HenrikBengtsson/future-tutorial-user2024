@@ -9,7 +9,7 @@
 <meta name="author" content="Henrik Bengtsson">
 <meta name="description" content="Speed up your code through parallel computing">
 
-<title>Lab: Futureverse 1 – Futurverse - RaukR! 2025</title>
+<title>Lab: Futureverse 1 – Futurverse - UseR! 2024</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -145,7 +145,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Futurverse - RaukR! 2025</span>
+    <span class="navbar-title">Futurverse - UseR! 2024</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -205,7 +205,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#simple-parallel-tasks" id="toc-simple-parallel-tasks" class="nav-link" data-scroll-target="#simple-parallel-tasks">Simple parallel tasks</a></li>
   <li><a href="#create-many-parallel-tasks-via-a-for-loop" id="toc-create-many-parallel-tasks-via-a-for-loop" class="nav-link" data-scroll-target="#create-many-parallel-tasks-via-a-for-loop">Create many parallel tasks via a for loop</a></li>
-  <li><a href="#our-own-parallel-map" id="toc-our-own-parallel-map" class="nav-link" data-scroll-target="#our-own-parallel-map">Our own parallel map</a></li>
+  <li><a href="#our-own-parallel-lapply" id="toc-our-own-parallel-lapply" class="nav-link" data-scroll-target="#our-own-parallel-lapply">Our own parallel lapply</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -253,7 +253,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This lab will take you through some basic steps to parallelize your code using <strong><a href="https://www.futureverse.org/">Futureverse</a></strong>. It focuses on core functions <code>future()</code> and <code>value()</code> for the purpose of illustrating what happens behind the scenes when we parallelize R code.</p>
+<p>This is the first of two parallelization labs. It will take you through some basic steps to parallelize your code using <strong><a href="https://www.futureverse.org/">Futureverse</a></strong>. It focuses on core functions <code>future()</code> and <code>value()</code> for the purpose of illustrating what happens behind the scenes when we parallelize R code.</p>
 <p>You are highly encouraged to test things out yourself and tweak things to figure out how these methods behave.</p>
 <p>Slides: <em>You’ll find the slides in the menus above.</em></p>
 </div>
@@ -322,7 +322,6 @@ Note
 </div>
 <p><em>Make sure you can run the latter, that it takes ten seconds to complete and that it returns the correct value.</em></p>
 <p>We are now ready to get rolling!</p>
-<p>PS. Feel free to add a second argument <code>delay = 1.0</code>, so you an tweak the 1.0 second delay that is otherwise hard-coded into <code>Sys.sleep()</code>.</p>
 <section id="simple-parallel-tasks" class="level3">
 <h3 class="anchored" data-anchor-id="simple-parallel-tasks">Simple parallel tasks</h3>
 <p>At the very core of Futureverse is the <strong><a href="https://future.futureverse.org/">future</a></strong> package. Let us start out by loading this core package:</p>
@@ -369,83 +368,55 @@ a single parallel worker. -->
 \ldots + 5\)</span> and (b) <span class="math inline">\(6 + 7 + \ldots + 10\)</span>, and then sum the two results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">value</span>(fa)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">value</span>(fb)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> a <span class="sc">+</span> b</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(fa) <span class="sc">+</span> <span class="fu">value</span>(fb)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>But first, make sure to add <code>toc()</code> after each statement to better understand how long each step takes;</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tic</span>()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">value</span>(fa)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>))</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">&lt;-</span> <span class="fu">future</span>(<span class="fu">slow_sum</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">value</span>(fa) <span class="sc">+</span> <span class="fu">value</span>(fb)</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">value</span>(fb)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> a <span class="sc">+</span> b</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>y</span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>y</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><em>Make sure you get the expected result. Did it finish sooner? Which steps took the longest? Why do you think that is?</em></p>
+<p><em>Make sure you get the expected result. Did it finish sooner? Which step takes the longest? Why do you think that is?</em></p>
 <!-- Both `future()` calls are swift, because they are non-blocking
-when using a parallel backend. However, `value(fa)` and `value(fb)`
-blocks, because they wait for the values of future `fa` and future `fb`
-to be available. The total processing time is still ten seconds. -->
-<p>Finally, if you still don’t see an overall speedup, please adjust the code so it finishes sooner:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&lt;</span> your code here <span class="sc">&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<!--
-
-::: {.cell}
-
-```{.r .cell-code}
-fa <- future(slow_sum(1:5))
-fb <- future(slow_sum(6:10))
-a <- value(fa)
-b <- value(fb)
-y <- a + b
-y
-```
-:::
-
--->
+when using a parallel backend. However, `y <- value(fa) + value(fb)`
+blocks, because it waits for the values of future `fa` and future `fb`
+to be available. The total processing time is five seconds. -->
 </section>
 <section id="create-many-parallel-tasks-via-a-for-loop" class="level3">
 <h3 class="anchored" data-anchor-id="create-many-parallel-tasks-via-a-for-loop">Create many parallel tasks via a for loop</h3>
 <p><strong>Task 6:</strong></p>
-<p>Here is a somewhat convoluted way of calculating the sum <span class="math inline">\(1 + 2 +
-\ldots + 20\)</span> in four chunks and outputting messages to show the progress:</p>
+<p>Here is a very complicated way of calculating the sum <span class="math inline">\(1 + 2 + \ldots
++ 20\)</span> in four chunks and outputting messages to show the progress:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tic</span>()</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="fu">seq_along</span>(xs)) {</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"Iteration "</span>, ii))</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  ys[[ii]] <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(xs[[ii]])</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Done"</span>)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Individual sums:"</span>)</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>ys</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Total sum:"</span>)</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>y</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tic</span>()</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (ii <span class="cf">in</span> <span class="fu">seq_along</span>(xs)) {</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="fu">paste0</span>(<span class="st">"Iteration "</span>, ii))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  ys[[ii]] <span class="ot">&lt;-</span> <span class="fu">slow_sum</span>(xs[[ii]])</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Done"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ys)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>ys</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>y</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Rewrite it such that each iteration is parallelized via a future. Use four parallel workers as in:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <!--
 
@@ -474,36 +445,36 @@ toc()
 <p><strong>Task 7:</strong></p>
 <p>Retry with three parallel workers as in:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Did you notice something? What do you think happened?</em></p>
 </section>
-<section id="our-own-parallel-map" class="level3">
-<h3 class="anchored" data-anchor-id="our-own-parallel-map">Our own parallel map</h3>
+<section id="our-own-parallel-lapply" class="level3">
+<h3 class="anchored" data-anchor-id="our-own-parallel-lapply">Our own parallel lapply</h3>
 <p><strong>Task 8:</strong></p>
-<p>Above, you used a for-loop to parallelize tasks. See if you can achieve the same using <code>map()</code> instead.</p>
+<p>Above, you used a for-loop to parallelize tasks. See if you can achieve the same using <code>lapply()</code> instead.</p>
 <p><strong>Task 9:</strong></p>
-<p>Take your parallel <code>map()</code> code and wrap it up in a function <code>future_map()</code> that takes two arguments <code>xs</code> and <code>fun</code> so that we can call:</p>
+<p>Take your parallel <code>lapply()</code> code and wrap it up in a function <code>parallel_lapply()</code> that takes two arguments <code>X</code> and <code>FUN</code> so that we can call:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">future_map</span>(xs, slow_sum)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="dv">16</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">parallel_lapply</span>(xs, slow_sum)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>ys <span class="ot">&lt;-</span> <span class="fu">unlist</span>(ys)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">sum</span>(ys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <details>
 <summary>
 Solution
 </summary>
-<pre>future_map &lt;- function(xs, fun) {
-  ## Create futures that calls fun(xs[[1]]), fun(xs[[2]]), ...
-  fs &lt;- purrr::map(xs, function(x) {
-    ## For element 'x', create future that calls fun(x)
-    future(fun(x))
+<pre>parallel_lapply &lt;- function(X, FUN) {
+  ## Create futures that calls FUN(X[[1]]), FUN(X[[2]]), ...
+  fs &lt;- lapply(X, function(x) {
+    ## For element 'x', create future that calls FUN(x)
+    future(FUN(x))
   })
   
   ## Collect the values from all futures
